@@ -54,18 +54,6 @@ memory = ConversationBufferMemory(memory_key="chat_history")
 
 agent_chain = initialize_agent(tools=tools, llm=ChatOpenAI(temperature=0), agent=AgentType.CONVERSATIONAL_REACT_DESCRIPTION, verbose=True, memory=memory)
 
-'''
-def load_chain():
-    """Logic for loading the chain you want to use should go here."""
-    llm = OpenAI(openai_api_key=st.secrets["OPENAI_API_KEY"], temperature=0)
-    #agent = create_pandas_dataframe_agent(ChatOpenAI(temperature=0), df, verbose=True)
-    #agent = initialize_agent(tools, llm, agent=AgentType.conversational-react-description, verbose=True)
-    chain = ConversationChain(llm=llm)
-    return chain
-
-chain = load_chain()
-'''
-
 # From here down is all the StreamLit UI.
 st.set_page_config(page_title="Tec de Monterrey - Chatbot", page_icon=":robot:")
 st.header("Tec de Monterrey - Chatbot")
