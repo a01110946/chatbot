@@ -33,13 +33,14 @@ df['Impartido en '] = df['Impartido en '].str.split(', ')
 df['Impartido en '] = df['Impartido en '].apply(lambda x: [str(value).strip() for value in x])
 
 def tec_de_monterrey_agent_tool(input):
-    return tec_de_monterrey_agent_tool.run(input)
+    pandas_agent = create_pandas_dataframe_agent(ChatOpenAI(temperature=0), df, verbose=True)
+    return pandas_agent.run(input)
 
 python_repl = PythonREPL()
 
 tools = [
 Tool(
-    name="Tecnológcio de Monterrey Agent",
+    name="Tecnológico de Monterrey Agent",
     func=tec_de_monterrey_agent_tool,
     description="A tool to retrieve information from Tecnológico de Monterrey. Always assume you need to use this tool to get information from the Tec. Always answer in Spanish.",
 ),
