@@ -11,10 +11,26 @@ from langchain.agents import Tool, AgentType, initialize_agent
 from langchain.memory import ConversationBufferMemory
 from langchain.utilities import PythonREPL
 import pandas as pd
+import requests
 
-# Import Excel file, specify sheet name and range of columns to import
-df = pd.read_excel('Corpus de información.xlsx', sheet_name='Maestrías', header=0, dtype={'Maestría': str, 'Escuela': str, 'Universidad': str, 'Impartido en': list, 'Duración': str, 'Periodo': str})
-#agent = create_pandas_dataframe_agent(ChatOpenAI(temperature=0), df, verbose=True)
+# GitHub file URL
+file_url = "https://github.com/a01110946/chatbot/raw/main/tec_de_monterrey/Corpus%20de%20informaci%C3%B3n.xlsx"
+
+# Send a GET request to download the file
+response = requests.get(file_url)
+
+# Save the file locally
+with open("Corpus_de_informacion.xlsx", "wb") as file:
+    file.write(response.content)
+
+# Read the downloaded file using Pandas
+df = pd.read_excel("Corpus_de_informacion.xlsx", sheet_name='Maestrías', header=0, dtype={'Maestría': str, 'Escuela': str, 'Universidad': str, 'Impartido en': list, 'Duración': str, 'Periodo': str}, engine='openpyxl')
+
+# Split the values in the column based on comma delimiter
+df['Impartido en '] = df['Impartido en '].str.split(', ')
+
+# Convert the split values into a list of strings
+df['Impartido en '] = df['Impartido en '].apply(lambda x: [str(value).strip() for value in x])
 
 def tec_de_monterrey_agent_tool(input):
     return tec_de_monterrey_agent_tool.run(input)
