@@ -5,3 +5,4 @@ streamlit-chat
 pandas
 requests
 openpyxl
+tabulate
