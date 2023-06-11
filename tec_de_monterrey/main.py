@@ -6,6 +6,8 @@ from langchain.chains import ConversationChain
 from langchain.llms import OpenAI
 from langchain.schema import BaseOutputParser
 from typing import Any
+from langchain.llms import Cohere
+from langchain import PromptTemplate
 import re
 from langchain.agents.mrkl.prompt import FORMAT_INSTRUCTIONS
 from langchain.agents import ConversationalChatAgent
@@ -60,7 +62,7 @@ with open("Carreras_profesionales.csv", "wb") as file:
 
 # Read the downloaded file using Pandas
 #df = pd.read_excel("Corpus_de_informacion.xlsx", sheet_name='Oferta académica', header=0, dtype={'Nombre del Programa': str, 'Tipo de Programa': str, 'Escuela': str, 'Campus': list, 'Duración': str, 'Periodo': str}, engine='openpyxl')
-#df = pd.read_csv(filepath_or_buffer='Corpus de información.csv', sep=";", header=0, encoding='latin-1')
+
 df = pd.read_csv(filepath_or_buffer='Carreras_profesionales.csv', sep=",", header=0, encoding='latin-1')
 
 
@@ -78,24 +80,7 @@ df['Campus'] = df['Campus'].apply(lambda x: [str(value).strip() for value in x])
 
 def get_answer_csv(query: str) -> str:
 
-    prefix="""You are a virtual assistant from Tecnológico de Monterrey. Users ask you questions about the academic offer of Tec de Monterrey. Answer with as much information as possible.
-    When the user mentions 'Tec', 'Tec de Monterrey', 'Tecnológico', 'Tecnológico de Monterrey' or 'ITESM', they always assume that they are referring to the university.
-    You have access to a Pandas DataFrame with the information of the educational offer of the Tec, therefore, you must first check which columns the DataFrame contains
-    and what values can be used to filter said DataFrame by columns or by rows, to later extract the requested information.
-
-    Use the following format:
-
-    Question: the input question you must answer
-    Thought: you should always think about what to do
-    Action: the action to take, should be one of [Wikipedia]
-    Action Input: the input to the action
-    Observation: the result of the action
-    ... (this Thought/Action/Action Input/Observation can repeat N times)
-    Thought: I now know the final answer
-    Final Answer: the final answer to the original input question
-
-    Always answer in Spanish."""
-
+    llm = Cohere(cohere_api_key=os.environ["COHERE_API_KEY"])
     chat = ChatOpenAI(temperature=0, verbose=True)
 
     messages = [
@@ -104,22 +89,25 @@ def get_answer_csv(query: str) -> str:
     ]
     chat(messages)
 
-    csv_agent = create_pandas_dataframe_agent(llm=chat, df=df, prefix=prefix, verbose=True) #early_stopping_method="force", 
+    csv_agent = create_pandas_dataframe_agent(llm=chat,
+                                            df=[df],
+                                            verbose=True)
+    
+    response = csv_agent.run(query)
 
-    second_prompt = ChatPromptTemplate.from_template("Eres un asistente virtual del Tec de Monterrey. Te gusta conversar, eres extenso en tus respuestas.")
-    translator_chain = LLMChain(llm=chat, prompt=second_prompt)
+    template = """Translate the given text from English to Spanish.
 
-    overall_simple_chain = SimpleSequentialChain(chains=[csv_agent, translator_chain], verbose=True)
+    Text to translate: {text}
+    Translated text:"""
+    prompt = PromptTemplate(template=template, input_variables=["text"])
 
-    answer = overall_simple_chain.run(query)
+    llm_chain = LLMChain(prompt=prompt, llm=llm)
+
+    answer = llm_chain.run(text=response)
     
     return answer
 
 #--------------------------------------------------------------------------------
-#agent_chain = initialize_agent(tools=tools, llm=ChatOpenAI(temperature=0), agent=AgentType.CONVERSATIONAL_REACT_DESCRIPTION, verbose=True, memory=memory)
-#agent_chain = make_chain()
-
-
 
 
 
@@ -152,7 +140,9 @@ if "past" not in st.session_state:
 
 
 def get_text():
-    input_text = st.text_input("Tú: ", "Hola, ¿cómo estás?", key="input")
+    input_text = st.text_input("Tú: ",
+                               "Hola, soy un asistente virtual del Tec de Monterrey, estoy aquí para ayudarte a resolver tus dudas sobre la oferta académica\
+                                 del Tec de Monterrey. ¿Cómo puedo ayudarte hoy?", key="input")
     return input_text
 
 
