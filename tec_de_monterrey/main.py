@@ -103,11 +103,11 @@ def translation(response: str) -> str:
 
     Text to translate: {response}
     Translated text:"""
-    prompt = PromptTemplate(template=template, input_variables=["text"])
+    prompt = PromptTemplate(template=template, input_variables=["response"])
 
     llm_chain = LLMChain(prompt=prompt, llm=llm)
 
-    translation = llm_chain.run(text=response)
+    translation = llm_chain.run(response)
     
     return translation
 
