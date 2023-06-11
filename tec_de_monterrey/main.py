@@ -44,7 +44,7 @@ with open("Corpus de información.csv", "wb") as file:
 
 # Read the downloaded file using Pandas
 #df = pd.read_excel("Corpus_de_informacion.xlsx", sheet_name='Oferta académica', header=0, dtype={'Nombre del Programa': str, 'Tipo de Programa': str, 'Escuela': str, 'Campus': list, 'Duración': str, 'Periodo': str}, engine='openpyxl')
-df = pd.read_csv(filepath_or_buffer='Corpus de información.csv', sep=";", header=0)
+df = pd.read_csv(filepath_or_buffer='Corpus de información.csv', sep=";", header=0, encoding='latin-1')
 
 # Split the values in the column based on comma and pipe delimiters
 df['Campus'] = df['Campus'].str.split(', ')
