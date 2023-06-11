@@ -26,6 +26,9 @@ from langchain.utilities import PythonREPL
 import pandas as pd
 import requests
 import urllib.request
+from langchain.chains import SimpleSequentialChain
+from langchain.prompts import ChatPromptTemplate
+from langchain.chains import LLMChain
 
 # OPENAI_API_KEY ENVIROMENTAL VARIABLE 
 import os
@@ -46,22 +49,24 @@ image = Image.open('logo_tec_de_monterrey')
 
 
 # GitHub file URL
-file_url = "https://raw.githubusercontent.com/a01110946/chatbot/main/tec_de_monterrey/Corpus_de_informacion.csv"
+file_url = "https://raw.githubusercontent.com/a01110946/chatbot/main/tec_de_monterrey/Corpus_de_informacion_sin_plan_de_estudios.csv"
 
 # Send a GET request to download the file
 response = requests.get(file_url)
 
 # Save the file locally
-with open("Corpus de información.csv", "wb") as file:
+with open("Corpus_de_informacion_sin_plan_de_estudios.csv", "wb") as file:
     file.write(response.content)
 
 # Read the downloaded file using Pandas
 #df = pd.read_excel("Corpus_de_informacion.xlsx", sheet_name='Oferta académica', header=0, dtype={'Nombre del Programa': str, 'Tipo de Programa': str, 'Escuela': str, 'Campus': list, 'Duración': str, 'Periodo': str}, engine='openpyxl')
-df = pd.read_csv(filepath_or_buffer='Corpus de información.csv', sep=";", header=0, encoding='latin-1')
+#df = pd.read_csv(filepath_or_buffer='Corpus de información.csv', sep=";", header=0, encoding='latin-1')
+df = pd.read_csv(filepath_or_buffer='Corpus_de_informacion_sin_plan_de_estudios.csv', sep=",", header=0, encoding='latin-1')
+
 
 # Split the values in the column based on comma and pipe delimiters
 df['Campus'] = df['Campus'].astype(str).str.split(', ')
-df['Plan de Estudios'] = df['Plan de Estudios'].astype(str).str.split('|')
+#df['Plan de Estudios'] = df['Plan de Estudios'].astype(str).str.split('|')
 
 # Convert the split values into a list of strings
 df['Campus'] = df['Campus'].apply(lambda x: [str(value).strip() for value in x])
@@ -72,24 +77,52 @@ df['Campus'] = df['Campus'].apply(lambda x: [str(value).strip() for value in x])
 #    return pandas_agent.run(input)
 
 def get_answer_csv(query: str) -> str:
-    """
-    Returns the answer to the given query by querying a CSV file.
 
-    Args:
-    - query (str): the question to ask the agent.
+    prefix="""You are a virtual assistant from Tecnológico de Monterrey. Users ask you questions about the academic offer of Tec de Monterrey. Answer with as much information as possible.
+    When the user mentions 'Tec', 'Tec de Monterrey', 'Tecnológico', 'Tecnológico de Monterrey' or 'ITESM', they always assume that they are referring to the university.
+    You have access to a Pandas DataFrame with the information of the educational offer of the Tec, therefore, you must first check which columns the DataFrame contains
+    and what values can be used to filter said DataFrame by columns or by rows, to later extract the requested information.
 
-    Returns:
-    - answer (str): the answer to the query from the CSV file.
-    """
+    Use the following format:
 
-    agent = create_pandas_dataframe_agent(ChatOpenAI(temperature=0), df, verbose=True)
+    Question: the input question you must answer
+    Thought: you should always think about what to do
+    Action: the action to take, should be one of [Wikipedia]
+    Action Input: the input to the action
+    Observation: the result of the action
+    ... (this Thought/Action/Action Input/Observation can repeat N times)
+    Thought: I now know the final answer
+    Final Answer: the final answer to the original input question
 
-    answer = agent.run(query)
+    Always answer in Spanish."""
+
+    chat = ChatOpenAI(temperature=0, verbose=True)
+
+    messages = [
+        SystemMessage(content="Eres un asistente virtual del Tec de Monterrey. Te gusta conversar, eres extenso en tus respuestas."),
+        HumanMessage(content="Hola, quisiera solicitar información sobre la oferta académica del Tec.")
+    ]
+    chat(messages)
+
+    csv_agent = create_pandas_dataframe_agent(llm=chat, df=df, prefix=prefix, verbose=True) #early_stopping_method="force", 
+
+    second_prompt = ChatPromptTemplate.from_template("You are a helpful assistant that translate text from English to Spanish {english_text}.")
+    translator_chain = LLMChain(llm=chat, prompt=second_prompt)
+
+    overall_simple_chain = SimpleSequentialChain(chains=[csv_agent, translator_chain], verbose=True)
+
+    answer = overall_simple_chain.run(query)
+    
     return answer
 
 #--------------------------------------------------------------------------------
 #agent_chain = initialize_agent(tools=tools, llm=ChatOpenAI(temperature=0), agent=AgentType.CONVERSATIONAL_REACT_DESCRIPTION, verbose=True, memory=memory)
 #agent_chain = make_chain()
+
+
+
+
+
 
 # SECCION DE ENCABEZADOS Y PANTALLA DE INICIO
 # From here down is all the StreamLit UI.
