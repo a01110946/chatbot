@@ -14,25 +14,25 @@ import pandas as pd
 import requests
 
 # GitHub file URL
-file_url = "https://github.com/a01110946/chatbot/blob/main/tec_de_monterrey/Corpus%20de%20informaci%C3%B3n_v2.csv"
+file_url = "https://raw.githubusercontent.com/a01110946/chatbot/main/tec_de_monterrey/Carreras_profesionales.csv"
 
 # Send a GET request to download the file
 response = requests.get(file_url)
 
 # Save the file locally
-with open("Corpus de información_v2.csv", "wb") as file:
+with open("Carreras_profesionales.csv", "wb") as file:
     file.write(response.content)
 
 
 # Read the downloaded file using Pandas
-#df = pd.read_excel("Corpus de información_v1.xlsx", sheet_name='Maestrías', header=0, dtype={'Maestría': str, 'Escuela': str, 'Universidad': str, 'Impartido en': list, 'Duración': str, 'Periodo': str})
-df = pd.read_csv("Corpus de información_v2.csv", sep=",")
+#df = pd.read_excel("Corpus de información_v1.xlsx", sheet_name='Maestrías', header=0, dtype={'Maestría': str, 'Escuela': str, 'Universidad': str, 'Impartido en': list, 'Duración': str, 'Periodo': str}, engine='openpyxl')
+df = pd.read_csv("Carreras_profesionales.csv", sep=",", encoding="latin-1")
 
 # Split the values in the column based on comma delimiter
-df['Impartido en'] = df['Impartido en'].str.split(', ')
+df['Campus'] = df['Campus'].str.split('; ')
 
 # Convert the split values into a list of strings
-df['Impartido en'] = df['Impartido en'].apply(lambda x: [str(value).strip() for value in x])
+df['Campus'] = df['Campus'].apply(lambda x: [str(value).strip() for value in x])
 
 def tec_de_monterrey_agent_tool(input):
     pandas_agent = create_pandas_dataframe_agent(ChatOpenAI(temperature=0), df, verbose=True)
