@@ -24,14 +24,16 @@ response = requests.get(file_url)
 with open("Corpus de información_v1.xlsx", "wb") as file:
     file.write(response.content)
 
+
+
 # Read the downloaded file using Pandas
-df = pd.read_excel("Corpus de información_v1.xlsx", sheet_name='Maestrías', header=0, dtype={'Maestría': str, 'Escuela': str, 'Universidad': str, 'Impartido en': list, 'Duración': str, 'Periodo': str}, engine='openpyxl')
+df = pd.read_excel("Corpus de información_v1.xlsx", sheet_name='Maestrías', header=0, dtype={'Maestría': str, 'Escuela': str, 'Universidad': str, 'Impartido en': str, 'Duración': str, 'Periodo': str}, engine='openpyxl')
 
 # Split the values in the column based on comma delimiter
-df['Impartido en '] = df['Impartido en '].str.split(', ')
+df['Impartido en'] = df['Impartido en'].str.split(', ')
 
 # Convert the split values into a list of strings
-df['Impartido en '] = df['Impartido en '].apply(lambda x: [str(value).strip() for value in x])
+df['Impartido en'] = df['Impartido en'].apply(lambda x: [str(value).strip() for value in x])
 
 def tec_de_monterrey_agent_tool(input):
     pandas_agent = create_pandas_dataframe_agent(ChatOpenAI(temperature=0), df, verbose=True)
