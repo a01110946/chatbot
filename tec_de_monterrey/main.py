@@ -12,7 +12,6 @@ from langchain.memory import ConversationBufferMemory
 from langchain.utilities import PythonREPL
 import pandas as pd
 import requests
-import openpyxl
 
 # GitHub file URL
 file_url = "https://github.com/a01110946/chatbot/blob/main/tec_de_monterrey/Corpus%20de%20informaci%C3%B3n_v1.xlsx"
@@ -25,9 +24,8 @@ with open("Corpus de información_v1.xlsx", "wb") as file:
     file.write(response.content)
 
 
-
 # Read the downloaded file using Pandas
-df = pd.read_excel("Corpus de información_v1.xlsx", sheet_name='Maestrías', header=0, dtype={'Maestría': str, 'Escuela': str, 'Universidad': str, 'Impartido en': str, 'Duración': str, 'Periodo': str}, engine='openpyxl')
+df = pd.read_excel("Corpus de información_v1.xlsx", sheet_name='Maestrías', header=0, dtype={'Maestría': str, 'Escuela': str, 'Universidad': str, 'Impartido en': list, 'Duración': str, 'Periodo': str}, engine='openpyxl')
 
 # Split the values in the column based on comma delimiter
 df['Impartido en'] = df['Impartido en'].str.split(', ')
