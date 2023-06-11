@@ -47,8 +47,8 @@ with open("Corpus de información.csv", "wb") as file:
 df = pd.read_csv(filepath_or_buffer='Corpus de información.csv', sep=";", header=0, encoding='latin-1')
 
 # Split the values in the column based on comma and pipe delimiters
-df['Campus'] = df['Campus'].str.split(', ')
-df['Plan de Estudios'] = df['Plan de Estudios'].str.split('|')
+df['Campus'] = df['Campus'].astype(str).str.split(', ')
+df['Plan de Estudios'] = df['Plan de Estudios'].astype(str).str.split('|')
 
 # Convert the split values into a list of strings
 df['Campus'] = df['Campus'].apply(lambda x: [str(value).strip() for value in x])
