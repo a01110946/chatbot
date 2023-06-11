@@ -12,38 +12,25 @@ from langchain.memory import ConversationBufferMemory
 from langchain.utilities import PythonREPL
 import pandas as pd
 import requests
-import urllib.request
-
-# OPENAI_API_KEY ENVIROMENTAL VARIABLE 
-#import os
-#import openai
-#openai_api_key = st.secrets["OPENAI_API_KEY"]
-# END ON ENVIRONMENTAL VARIABLE
-
-#AGREGADO PARA IMAGENES
-from PIL import Image
-urllib.request.urlretrieve('https://raw.githubusercontent.com/a01110946/chatbot/main/tec_de_monterrey/tecnologico_de_monterrey-blue.jpeg', 'logo_tec_de_monterrey')
-image = Image.open('logo_tec_de_monterrey')
-### FIN DE AGREGADO PARA IMAGENES
 
 # GitHub file URL
-file_url = "https://raw.githubusercontent.com/a01110946/chatbot/main/tec_de_monterrey/Carreras_profesionales.csv"
+file_url = "https://github.com/a01110946/chatbot/blob/main/tec_de_monterrey/Corpus%20de%20informaci%C3%B3n_v1.xlsx"
 
 # Send a GET request to download the file
 response = requests.get(file_url)
 
 # Save the file locally
-with open("Carreras_profesionales.csv", "wb") as file:
+with open("Corpus de información_v1.xlsx.xlsx", "wb") as file:
     file.write(response.content)
 
 # Read the downloaded file using Pandas
-df = pd.read_csv(filepath_or_buffer='Carreras_profesionales.csv', sep=",", header=0, encoding='latin-1')
+df = pd.read_excel("Corpus de información_v1.xlsx.xlsx", sheet_name='Maestrías', header=0, dtype={'Maestría': str, 'Escuela': str, 'Universidad': str, 'Impartido en': list, 'Duración': str, 'Periodo': str}, engine='openpyxl')
 
 # Split the values in the column based on comma delimiter
-df['Campus'] = df['Campus'].str.split(', ')
+df['Impartido en '] = df['Impartido en '].str.split(', ')
 
 # Convert the split values into a list of strings
-df['Campus'] = df['Campus'].apply(lambda x: [str(value).strip() for value in x])
+df['Impartido en '] = df['Impartido en '].apply(lambda x: [str(value).strip() for value in x])
 
 def tec_de_monterrey_agent_tool(input):
     pandas_agent = create_pandas_dataframe_agent(ChatOpenAI(temperature=0), df, verbose=True)
@@ -68,25 +55,9 @@ memory = ConversationBufferMemory(memory_key="chat_history")
 
 agent_chain = initialize_agent(tools=tools, llm=ChatOpenAI(temperature=0), agent=AgentType.CONVERSATIONAL_REACT_DESCRIPTION, verbose=True, memory=memory)
 
-
-# SECCION DE ENCABEZADOS Y PANTALLA DE INICIO
 # From here down is all the StreamLit UI.
-st.set_page_config(page_title="Tec de Monterrey - Chatbot", page_icon=":robot:", layout="wide")
-st.image(image) #despliega el logo
-st.header('ChatBot del Tec de Monterrey')
-st.subheader('Asistente que contesta tus dudas generales')
-st.write("---")
-######
-
-st.sidebar.header('Hola, Bienvenido(a)')
-st.sidebar.markdown("""
-Esta App tiene por objeto contestar a tus dudas sobre las carreras 
-profesionales así como los posgrados que tiene el Tec de Monterrey.
-    
-Realiza la preguntas a nuestro Chatbot.
-""")
-###### FIN DE PANTALLA DE INICIO
-
+st.set_page_config(page_title="Tec de Monterrey - Chatbot", page_icon=":robot:")
+st.header("Tec de Monterrey - Chatbot")
 
 if "generated" not in st.session_state:
     st.session_state["generated"] = []
@@ -96,7 +67,7 @@ if "past" not in st.session_state:
 
 
 def get_text():
-    input_text = st.text_input("Tú: ", "Hola, enlista la oferta completa de carreras profesionales del Tec.", key="input")
+    input_text = st.text_input("Tú: ", "Hola, ¿cómo estás?", key="input")
     return input_text
 
 
