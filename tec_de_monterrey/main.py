@@ -46,11 +46,13 @@ with open("Corpus de información.csv", "wb") as file:
 #df = pd.read_excel("Corpus_de_informacion.xlsx", sheet_name='Oferta académica', header=0, dtype={'Nombre del Programa': str, 'Tipo de Programa': str, 'Escuela': str, 'Campus': list, 'Duración': str, 'Periodo': str}, engine='openpyxl')
 df = pd.read_csv(filepath_or_buffer='Corpus de información.csv', sep=";", header=0)
 
-# Split the values in the column based on comma delimiter
+# Split the values in the column based on comma and pipe delimiters
 df['Campus'] = df['Campus'].str.split(', ')
+df['Plan de Estudios'] = df['Plan de Estudios'].str.split('|')
 
 # Convert the split values into a list of strings
 df['Campus'] = df['Campus'].apply(lambda x: [str(value).strip() for value in x])
+df['Plan de Estudios'] = df['Plan de Estudios'].apply(lambda x: [str(value).strip() for value in x])
 
 def tec_de_monterrey_agent_tool(input):
     pandas_agent = create_pandas_dataframe_agent(ChatOpenAI(temperature=0), df, verbose=True)
