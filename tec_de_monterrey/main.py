@@ -24,7 +24,7 @@ from PIL import Image
 #aqui va la ruta real que pondremos en github
 #sustituir esta linea cuando la imagen la subas
 #image = Image.open('/users/sofia/downloads/tecnologico-de-monterrey-blue.png')
-image = Image.open('https://raw.githubusercontent.com/a01110946/chatbot/main/tec_de_monterrey/tecnologico_de_monterrey-blue.jpeg')
+image = Image.open('https://github.com/a01110946/chatbot/blob/main/tec_de_monterrey/tecnologico_de_monterrey-blue.jpeg')
 ### FIN DE AGREGADO PARA IMAGENES
 
 
