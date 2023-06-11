@@ -47,10 +47,10 @@ with open("Corpus de información.csv", "wb") as file:
 df = pd.read_csv(filepath_or_buffer='Corpus de información.csv')
 
 # Split the values in the column based on comma delimiter
-df['Campus'] = df['Campus'].str.split(', ')
+#df['Campus'] = df['Campus'].str.split(', ')
 
 # Convert the split values into a list of strings
-df['Campus'] = df['Campus'].apply(lambda x: [str(value).strip() for value in x])
+#df['Campus'] = df['Campus'].apply(lambda x: [str(value).strip() for value in x])
 
 def tec_de_monterrey_agent_tool(input):
     pandas_agent = create_pandas_dataframe_agent(ChatOpenAI(temperature=0), df, verbose=True)
