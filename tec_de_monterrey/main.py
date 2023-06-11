@@ -33,7 +33,7 @@ image = Image.open('logo_tec_de_monterrey')
 
 
 # GitHub file URL
-file_url = "https://raw.githubusercontent.com/a01110946/chatbot/main/tec_de_monterrey/Corpus%20de%20informaci%C3%B3n.csv"
+file_url = "https://github.com/a01110946/chatbot/blob/main/tec_de_monterrey/Corpus%20de%20informaci%C3%B3n.csv"
 
 # Send a GET request to download the file
 response = requests.get(file_url)
