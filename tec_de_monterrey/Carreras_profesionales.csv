@@ -1,0 +1,45 @@
+Nombre del Programa,Tipo de Programa,Escuela,Campus,Duración,Periodo
+ARQ-Arquitectura,Carrera profesional,Ambiente Construido,Ciudad de México; Estado de México; Santa Fe; Guadalajara; Monterrey; Puebla; Querétaro; Sonora Norte,8 semestres,Semestral
+IC-Ingeniería Civil,Carrera profesional,Ambiente Construido,Estado de México; Santa Fe; Guadalajara; Monterrey; Puebla; Querétaro,8 semestres,Semestral
+LUB-Licenciatura en Urbanismo,Carrera profesional,Ambiente Construido,Monterrey,8 semestres,Semestral
+LEC-Licenciatura en Economía,Carrera profesional,Derecho; Economía y Relaciones Internacionales,Ciudad de México; Estado de México; Santa Fe; Monterrey; Puebla,8 semestres,Semestral
+LED-Licenciatura en Derecho,Carrera profesional,Derecho; Economía y Relaciones Internacionales,Ciudad de México; Estado de México; Santa Fe; Monterrey; Puebla; Chihuahua; Guadalajara; Querétaro; Toluca,8 semestres,Semestral
+LRI-Licenciatura en Relaciones Internacionales,Carrera profesional,Derecho; Economía y Relaciones Internacionales,Ciudad de México; Estado de México; Santa Fe; Guadalajara; Monterrey; Puebla; Querétaro,8 semestres,Semestral
+LTP-Licenciatura en Gobierno y Transformación Pública,Carrera profesional,Derecho; Economía y Relaciones Internacionales,Ciudad de México; Monterrey,8 semestres,Semestral
+LAD-Licenciatura en Arte Digital,Carrera profesional,Estudios Creativos,Ciudad de México; Estado de México; Santa Fe; Guadalajara; Monterrey; Puebla; Querétaro,8 semestres,Semestral
+LC-Licenciatura en Comunicación,Carrera profesional,Estudios Creativos,Ciudad de México; Estado de México; Santa Fe; Guadalajara; Monterrey; Puebla; Querétaro; Toluca,8 semestres,Semestral
+LDI-Licenciatura en Diseño,Carrera profesional,Estudios Creativos,Ciudad de México; Estado de México; Guadalajara; Monterrey; Puebla; Querétaro; Sonora Norte; Toluca,8 semestres,Semestral
+LEI-Licenciatura en Innovación Educativa,Carrera profesional,Estudios Creativos,Monterrey,8 semestres,Semestral
+LLE-Licenciatura en Letras Hispánicas,Carrera profesional,Estudios Creativos,Monterrey,8 semestres,Semestral
+LPE-Licenciatura en Periodismo,Carrera profesional,Estudios Creativos,Monterrey,8 semestres,Semestral
+LTM-Licenciatura en Tecnología y Producción Musical,Carrera profesional,Estudios Creativos,Ciudad de México; Estado de México; Santa Fe; Guadalajara; Monterrey; Puebla; Querétaro,8 semestres,Semestral
+IDM-Ingeniería en Ciencia de Datos y Matemáticas,Carrera profesional,Ingeniería y Ciencias,Ciudad de México; Estado de México; Guadalajara; Monterrey; Puebla; Querétaro; Sonora Norte; Toluca,8 semestres,Semestral
+IFI-Ingeniería Física Industrial,Carrera profesional,Ingeniería y Ciencias,Monterrey,8 semestres,Semestral
+INA-Ingeniería en Nanotecnología,Carrera profesional,Ingeniería y Ciencias,Estado de México; Monterrey,8 semestres,Semestral
+IAG-Ingeniería en Biosistemas Agroalimentarios,Carrera profesional,Ingeniería y Ciencias,Querétaro,8 semestres,Semestral
+IAL-Ingeniería en Alimentos,Carrera profesional,Ingeniería y Ciencias,Monterrey; Querétaro,8 semestres,Semestral
+IBT-Ingeniería en Biotecnología,Carrera profesional,Ingeniería y Ciencias,Ciudad de México; Estado de México; Chihuahua; Guadalajara; Monterrey; Puebla; Querétaro; Toluca,8 semestres,Semestral
+IDS-Ingeniería en Desarrollo Sustentable,Carrera profesional,Ingeniería y Ciencias,Querétaro; Ciudad de México; Santa Fe; Monterrey,8 semestres,Semestral
+IQ-Ingeniería Química,Carrera profesional,Ingeniería y Ciencias,Puebla; Estado de México; Guadalajara; Monterrey,8 semestres,Semestral
+IRS-Ingeniería en Robótica y Sistemas Digitales,Carrera profesional,Ingeniería y Ciencias,Querétaro; Puebla; Ciudad de México; Estado de México; Guadalajara; Monterrey,8 semestres,Semestral
+ITC-Ingeniería en Tecnologías Computacionales,Carrera profesional,Ingeniería y Ciencias,Querétaro; Toluca; Puebla; Chihuahua; Cuernavaca; Guadalajara; Ciudad de México; Estado de México; Sonora Norte; Santa Fe; Monterrey,8 semestres,Semestral
+ITD-Ingeniería en Transformación Digital de Negocios,Carrera profesional,Ingeniería y Ciencias,Santa Fe; Monterrey,8 semestres,Semestral
+IE-Ingeniería en Electrónica,Carrera profesional,Ingeniería y Ciencias,Monterrey,8 semestres,Semestral
+IID-Ingeniería en Innovación y Desarrollo,Carrera profesional,Ingeniería y Ciencias,Guadalajara; Santa Fe; Monterrey,8 semestres,Semestral
+IIS-Ingeniería Industrial y de Sistemas,Carrera profesional,Ingeniería y Ciencias,Chihuahua; Laguna; Saltillo; Tampico; Hidalgo; León; Querétaro; San Luis Potosí; Toluca; Puebla; Ciudad de México; Estado de México; Cuernavaca; Guadalajara; Sinaloa; Sonora Norte; Aguascalientes; Santa Fe; Monterrey; Ciudad Juárez,8 semestres,Semestral
+IM-Ingeniería Mecánica,Carrera profesional,Ingeniería y Ciencias,Chihuahua; Querétaro; Toluca; Puebla; Ciudad de México; Estado de México; Guadalajara; Santa Fe; Monterrey,8 semestres,Semestral
+IMD-Ingeniería Biomédica,Carrera profesional,Ingeniería y Ciencias,Ciudad de México; Guadalajara; Monterrey,8 semestres,Semestral
+IMT-Ingeniería en Mecatrónica,Carrera profesional,Ingeniería y Ciencias,Chihuahua; Laguna; Saltillo; Tampico; León; Querétaro; San Luis Potosí; Toluca; Puebla; Ciudad de México; Estado de México; Cuernavaca; Guadalajara; Sonora Norte; Aguascalientes; Santa Fe; Morelia; Monterrey; Ciudad Juárez,8 semestres,Semestral
+LAET-Licenciatura en Estrategia y Transformación de Negocios,Carrera profesional,Negocios,Chihuahua; Laguna; Saltillo; Tampico; Hidalgo; León; Querétaro; San Luis Potosí; Toluca; Puebla; Ciudad de México; Estado de México; Cuernavaca; Guadalajara; Sinaloa; Sonora Norte; Aguascalientes; Santa Fe; Morelia; Monterrey; Ciudad Juárez,8 semestres,Semestral
+LAF-Licenciatura en Finanzas,Carrera profesional,Negocios,Chihuahua; Laguna; León; Querétaro; San Luis Potosí; Puebla; Ciudad de México; Estado de México; Cuernavaca; Guadalajara; Sinaloa; Sonora Norte; Aguascalientes; Santa Fe; Monterrey,8 semestres,Semestral
+LCPF-Licenciatura en Contaduría Pública y Finanzas,Carrera profesional,Negocios,Hidalgo; Querétaro; Puebla; Toluca; Ciudad de México; Estado de México; Guadalajara; Santa Fe; Monterrey,8 semestres,Semestral
+LDE-Licenciatura en Emprendimiento,Carrera profesional,Negocios,Querétaro; Puebla; Ciudad de México; Guadalajara; Santa Fe; Monterrey,8 semestres,Semestral
+LDO-Licenciatura en Desarrollo de Talento y Cultura Organizacional,Carrera profesional,Negocios,Estado de México; Monterrey,8 semestres,Semestral
+LEM-Licenciatura en Mercadotecnia,Carrera profesional,Negocios,León; Querétaro; Toluca; Puebla; Ciudad de México; Estado de México; Guadalajara; Sinaloa; Sonora Norte; Santa Fe; Monterrey,8 semestres,Semestral
+LIN-Licenciatura en Negocios Internacionales,Carrera profesional,Negocios,Aguascalientes; Chihuahua; Laguna; Morelia; Ciudad Juárez; Saltillo; Tampico; León; San Luis Potosí; Estado de México; Sinaloa; Sonora Norte,8 semestres,Semestral
+LIT-Licenciatura en Inteligencia de Negocios,Carrera profesional,Negocios,Querétaro; Puebla; Estado de México; Guadalajara; Santa Fe; Monterrey,8 semestres,Semestral
+LBC-Licenciatura en Biociencias,Carrera profesional,Salud,Ciudad de México; Guadalajara; Monterrey y Chihuahua hasta tercer semestre,8 semestres,Semestral
+LNB-Licenciatura en Nutrición y Bienestar Integral,Carrera profesional,Salud,Ciudad de México; Guadalajara; Monterrey y Chihuahua hasta tercer semestre,6 semestres y 4 Trimestres Clínicos,Mixto
+LPS-Licenciatura en Psicología Clínica y de la Salud,Carrera profesional,Salud,Ciudad de México; Guadalajara; Monterrey y Chihuahua hasta tercer semestre,6 semestres y 4 Trimestres Clínicos,Mixto
+MC-Médico Cirujano,Carrera profesional,Salud,Ciudad de México; Guadalajara; Monterrey y Chihuahua hasta tercer semestre,8 semestres y 8 Trimestres Clínicos,Mixto
+MO-Médico Cirujano Odontólogo,Carrera profesional,Salud,Ciudad de México; Guadalajara; Monterrey y Chihuahua hasta tercer semestre,8 semestres y 4 Trimestres Clínicos,Mixto
