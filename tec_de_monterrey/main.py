@@ -67,7 +67,7 @@ df = pd.read_csv(filepath_or_buffer='Carreras_profesionales.csv', sep=",", heade
 
 
 # Split the values in the column based on comma and pipe delimiters
-df['Campus'] = df['Campus'].astype(str).str.split(', ')
+df['Campus'] = df['Campus'].astype(str).str.split('; ')
 #df['Plan de Estudios'] = df['Plan de Estudios'].astype(str).str.split('|')
 
 # Convert the split values into a list of strings
