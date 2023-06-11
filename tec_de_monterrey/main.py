@@ -80,7 +80,6 @@ df['Campus'] = df['Campus'].apply(lambda x: [str(value).strip() for value in x])
 
 def get_answer_csv(query: str) -> str:
 
-    llm = Cohere(cohere_api_key=os.environ["COHERE_API_KEY"])
     chat = ChatOpenAI(temperature=0, verbose=True)
 
     messages = [
@@ -95,17 +94,24 @@ def get_answer_csv(query: str) -> str:
     
     response = csv_agent.run(query)
 
+    return response
+
+def translation(response: str) -> str:
+
+    llm = Cohere(cohere_api_key=os.environ["COHERE_API_KEY"])
     template = """Translate the given text from English to Spanish.
 
-    Text to translate: {text}
+    Text to translate: {response}
     Translated text:"""
     prompt = PromptTemplate(template=template, input_variables=["text"])
 
     llm_chain = LLMChain(prompt=prompt, llm=llm)
 
-    answer = llm_chain.run(text=response)
+    translation = llm_chain.run(text=response)
     
-    return answer
+    return translation
+
+
 
 #--------------------------------------------------------------------------------
 
@@ -141,15 +147,15 @@ if "past" not in st.session_state:
 
 def get_text():
     input_text = st.text_input("Tú: ",
-                               "Hola, soy un asistente virtual del Tec de Monterrey, estoy aquí para ayudarte a resolver tus dudas sobre la oferta académica\
-                                 del Tec de Monterrey. ¿Cómo puedo ayudarte hoy?", key="input")
+                               "Hola, enlista la oferta completa de carreras profesionales del Tec.", key="input")
     return input_text
 
 
 user_input = get_text()
 
 if user_input:
-    output = get_answer_csv(query=user_input)
+    data = get_answer_csv(query=user_input)
+    output = translation(data)
     #agent_chain.run(input=user_input)
 
     st.session_state.past.append(user_input)
