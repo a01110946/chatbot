@@ -12,6 +12,7 @@ from langchain.memory import ConversationBufferMemory
 from langchain.utilities import PythonREPL
 import pandas as pd
 import requests
+import urllib.request
 
 # OPENAI_API_KEY ENVIROMENTAL VARIABLE 
 import os
@@ -24,7 +25,8 @@ from PIL import Image
 #aqui va la ruta real que pondremos en github
 #sustituir esta linea cuando la imagen la subas
 #image = Image.open('/users/sofia/downloads/tecnologico-de-monterrey-blue.png')
-image = Image.open('https://github.com/a01110946/chatbot/blob/main/tec_de_monterrey/tecnologico_de_monterrey-blue.jpeg')
+urllib.request.urlretrieve('https://raw.githubusercontent.com/a01110946/chatbot/main/tec_de_monterrey/tecnologico_de_monterrey-blue.jpeg', 'logo_tec_de_monterrey')
+image = Image.open('logo_tec_de_monterrey')
 ### FIN DE AGREGADO PARA IMAGENES
 
 
