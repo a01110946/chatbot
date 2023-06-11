@@ -80,7 +80,6 @@ df['Campus'] = df['Campus'].apply(lambda x: [str(value).strip() for value in x])
 
 def get_answer_csv(query: str) -> str:
 
-    df=df
     chat = ChatOpenAI(temperature=0, verbose=True)
 
     messages = [
