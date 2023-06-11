@@ -18,6 +18,7 @@ from langchain.schema import (
 )
 
 from langchain.agents import create_pandas_dataframe_agent
+from langchain.agents import create_csv_agent
 from langchain.chat_models import ChatOpenAI
 from langchain.agents import Tool, AgentType, initialize_agent
 from langchain.memory import ConversationBufferMemory
@@ -66,78 +67,29 @@ df['Plan de Estudios'] = df['Plan de Estudios'].astype(str).str.split('|')
 df['Campus'] = df['Campus'].apply(lambda x: [str(value).strip() for value in x])
 #df['Plan de Estudios'] = df['Plan de Estudios'].apply(lambda x: [str(value).strip() for value in x])
 
-def tec_de_monterrey_agent_tool(input):
-    pandas_agent = create_pandas_dataframe_agent(ChatOpenAI(temperature=0), df, verbose=True)
-    return pandas_agent.run(input)
+#def tec_de_monterrey_agent_tool(input):
+#    pandas_agent = create_pandas_dataframe_agent(ChatOpenAI(temperature=0), df, verbose=True)
+#    return pandas_agent.run(input)
 
-python_repl = PythonREPL()
+def get_answer_csv(query: str) -> str:
+    """
+    Returns the answer to the given query by querying a CSV file.
 
-tools = [
-Tool(
-    name="Tecnológico de Monterrey Agent",
-    func=tec_de_monterrey_agent_tool,
-    description="A tool to retrieve information from Tecnológico de Monterrey. Always assume you need to use this tool to get information from the Tec. Always answer in Spanish.",
-    return_direct=True
-),
-Tool(
-    name="python_repl",
-    description="A Python shell. Use this to execute python commands. Input should be a valid python command. If you want to see the output of a value, you should print it out with `print(...)`.",
-    func=python_repl.run,
-    return_direct=True
-)
-]
+    Args:
+    - query (str): the question to ask the agent.
 
-memory = ConversationBufferMemory(memory_key="chat_history")
+    Returns:
+    - answer (str): the answer to the query from the CSV file.
+    """
 
-#------------------------------------------------------------------------------
-class NewAgentOutputParser(BaseOutputParser):
-    def get_format_instructions(self) -> str:
-        return FORMAT_INSTRUCTIONS
+    agent = create_csv_agent(ChatOpenAI(temperature=0), verbose=True)
 
-    def parse(self, text: str) -> Any:
-        print("-" * 20)
-        cleaned_output = text.strip()
-        # Regex patterns to match action and action_input
-        action_pattern = r'"action":\s*"([^"]*)"'
-        action_input_pattern = r'"action_input":\s*"([^"]*)"'
+    answer = agent.run(query)
+    return answer
 
-        # Extracting first action and action_input values
-        action = re.search(action_pattern, cleaned_output)
-        action_input = re.search(action_input_pattern, cleaned_output)
-
-        if action:
-            action_value = action.group(1)
-            print(f"First Action: {action_value}")
-        else:
-            print("Action not found")
-
-        if action_input:
-            action_input_value = action_input.group(1)
-            print(f"First Action Input: {action_input_value}")
-        else:
-            print("Action Input not found")
-
-        print("-" * 20)
-        if action_value and action_input_value:
-            return {"action": action_value, "action_input": action_input_value}
-#------------------------------------------------------------------------------
-def make_chain():
-    memory = ConversationBufferMemory(
-        memory_key="chat_history", return_messages=True)
-
-    agent = ConversationalChatAgent.from_llm_and_tools(
-        llm=ChatOpenAI(), tools=[], system_message=SystemMessage, memory=memory, verbose=True, output_parser=NewAgentOutputParser())
-
-    agent_chain = AgentExecutor.from_agent_and_tools(
-        agent=agent,
-        tools=tools,
-        memory=memory,
-        verbose=True,
-    )
-    return agent_chain
 #--------------------------------------------------------------------------------
 #agent_chain = initialize_agent(tools=tools, llm=ChatOpenAI(temperature=0), agent=AgentType.CONVERSATIONAL_REACT_DESCRIPTION, verbose=True, memory=memory)
-agent_chain = make_chain()
+#agent_chain = make_chain()
 
 # SECCION DE ENCABEZADOS Y PANTALLA DE INICIO
 # From here down is all the StreamLit UI.
@@ -174,7 +126,8 @@ def get_text():
 user_input = get_text()
 
 if user_input:
-    output = agent_chain.run(input=user_input)
+    output = get_answer_csv(query=user_input)
+    #agent_chain.run(input=user_input)
 
     st.session_state.past.append(user_input)
     st.session_state.generated.append(output)
