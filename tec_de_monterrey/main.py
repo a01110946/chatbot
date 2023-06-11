@@ -49,19 +49,19 @@ image = Image.open('logo_tec_de_monterrey')
 
 
 # GitHub file URL
-file_url = "https://raw.githubusercontent.com/a01110946/chatbot/main/tec_de_monterrey/Carreras_profesionales_sin_plan_de_estudios.csv"
+file_url = "https://raw.githubusercontent.com/a01110946/chatbot/main/tec_de_monterrey/Carreras_profesionales.csv"
 
 # Send a GET request to download the file
 response = requests.get(file_url)
 
 # Save the file locally
-with open("Corpus_de_informacion_sin_plan_de_estudios.csv", "wb") as file:
+with open("Carreras_profesionales.csv", "wb") as file:
     file.write(response.content)
 
 # Read the downloaded file using Pandas
 #df = pd.read_excel("Corpus_de_informacion.xlsx", sheet_name='Oferta académica', header=0, dtype={'Nombre del Programa': str, 'Tipo de Programa': str, 'Escuela': str, 'Campus': list, 'Duración': str, 'Periodo': str}, engine='openpyxl')
 #df = pd.read_csv(filepath_or_buffer='Corpus de información.csv', sep=";", header=0, encoding='latin-1')
-df = pd.read_csv(filepath_or_buffer='Carreras_profesionales_sin_plan_de_estudios.csv', sep=",", header=0, encoding='latin-1')
+df = pd.read_csv(filepath_or_buffer='Carreras_profesionales.csv', sep=",", header=0, encoding='latin-1')
 
 
 # Split the values in the column based on comma and pipe delimiters
