@@ -33,17 +33,18 @@ image = Image.open('logo_tec_de_monterrey')
 
 
 # GitHub file URL
-file_url = "https://github.com/a01110946/chatbot/blob/main/tec_de_monterrey/Corpus_de_informacion.xlsx"
+file_url = "https://raw.githubusercontent.com/a01110946/chatbot/main/tec_de_monterrey/Corpus%20de%20informaci%C3%B3n.csv"
 
 # Send a GET request to download the file
 response = requests.get(file_url)
 
 # Save the file locally
-with open("Corpus_de_informacion.xlsx", "wb") as file:
+with open("Corpus de información.csv", "wb") as file:
     file.write(response.content)
 
 # Read the downloaded file using Pandas
-df = pd.read_excel("Corpus_de_informacion.xlsx", sheet_name='Oferta académica', header=0, dtype={'Nombre del Programa': str, 'Tipo de Programa': str, 'Escuela': str, 'Campus': list, 'Duración': str, 'Periodo': str}, engine='openpyxl')
+#df = pd.read_excel("Corpus_de_informacion.xlsx", sheet_name='Oferta académica', header=0, dtype={'Nombre del Programa': str, 'Tipo de Programa': str, 'Escuela': str, 'Campus': list, 'Duración': str, 'Periodo': str}, engine='openpyxl')
+df = pd.read_csv(filepath_or_buffer='Corpus de información.csv')
 
 # Split the values in the column based on comma delimiter
 df['Campus'] = df['Campus'].str.split(', ')
