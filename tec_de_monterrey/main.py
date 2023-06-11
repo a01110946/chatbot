@@ -12,6 +12,7 @@ from langchain.memory import ConversationBufferMemory
 from langchain.utilities import PythonREPL
 import pandas as pd
 import requests
+import openpyxl
 
 # GitHub file URL
 file_url = "https://github.com/a01110946/chatbot/blob/main/tec_de_monterrey/Corpus%20de%20informaci%C3%B3n_v1.xlsx"
