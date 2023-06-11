@@ -77,11 +77,13 @@ Tool(
     name="Tecnológico de Monterrey Agent",
     func=tec_de_monterrey_agent_tool,
     description="A tool to retrieve information from Tecnológico de Monterrey. Always assume you need to use this tool to get information from the Tec. Always answer in Spanish.",
+    return_direct=True
 ),
 Tool(
     name="python_repl",
     description="A Python shell. Use this to execute python commands. Input should be a valid python command. If you want to see the output of a value, you should print it out with `print(...)`.",
-    func=python_repl.run
+    func=python_repl.run,
+    return_direct=True
 )
 ]
 
