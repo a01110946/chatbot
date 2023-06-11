@@ -25,7 +25,7 @@ with open("Corpus de información_v1.xlsx", "wb") as file:
 
 
 # Read the downloaded file using Pandas
-df = pd.read_excel("Corpus de información_v1.xlsx", sheet_name='Maestrías', header=0, dtype={'Maestría': str, 'Escuela': str, 'Universidad': str, 'Impartido en': list, 'Duración': str, 'Periodo': str}, engine='openpyxl')
+df = pd.read_excel("Corpus de información_v1.xlsx", sheet_name='Maestrías', header=0, dtype={'Maestría': str, 'Escuela': str, 'Universidad': str, 'Impartido en': list, 'Duración': str, 'Periodo': str}, engine='xlrd')
 
 # Split the values in the column based on comma delimiter
 df['Impartido en'] = df['Impartido en'].str.split(', ')
