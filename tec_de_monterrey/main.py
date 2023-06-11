@@ -57,13 +57,13 @@ file_url = "https://raw.githubusercontent.com/a01110946/chatbot/main/tec_de_mont
 response = requests.get(file_url)
 
 # Save the file locally
-with open("tec_de_monterrey/Carreras_profesionales.csv", "wb") as file:
+with open("Carreras_profesionales.csv", "wb") as file:
     file.write(response.content)
 
 # Read the downloaded file using Pandas
 #df = pd.read_excel("Corpus_de_informacion.xlsx", sheet_name='Oferta académica', header=0, dtype={'Nombre del Programa': str, 'Tipo de Programa': str, 'Escuela': str, 'Campus': list, 'Duración': str, 'Periodo': str}, engine='openpyxl')
 
-df = pd.read_csv(filepath_or_buffer='tec_de_monterrey/Carreras_profesionales.csv', sep=",", header=0, encoding='latin-1')
+df = pd.read_csv(filepath_or_buffer='Carreras_profesionales.csv', sep=",", header=0, encoding='latin-1')
 
 
 # Split the values in the column based on comma and pipe delimiters
@@ -80,6 +80,7 @@ df['Campus'] = df['Campus'].apply(lambda x: [str(value).strip() for value in x])
 
 def get_answer_csv(query: str) -> str:
 
+    df=df
     chat = ChatOpenAI(temperature=0, verbose=True)
 
     messages = [
@@ -89,7 +90,7 @@ def get_answer_csv(query: str) -> str:
     chat(messages)
 
     csv_agent = create_pandas_dataframe_agent(llm=chat,
-                                            df=[df],
+                                            df=df,
                                             verbose=True)
     
     response = csv_agent.run(query)
