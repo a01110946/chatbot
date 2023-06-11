@@ -78,15 +78,9 @@ df['Campus'] = df['Campus'].apply(lambda x: [str(value).strip() for value in x])
 #    pandas_agent = create_pandas_dataframe_agent(ChatOpenAI(temperature=0), df, verbose=True)
 #    return pandas_agent.run(input)
 
-def get_answer_csv(query: str) -> str:
+def get_answer_csv(query: str, df=df) -> str:
 
     chat = ChatOpenAI(temperature=0, verbose=True)
-
-    messages = [
-        SystemMessage(content="Eres un asistente virtual del Tec de Monterrey. Te gusta conversar, eres extenso en tus respuestas."),
-        HumanMessage(content="Hola, quisiera solicitar información sobre la oferta académica del Tec.")
-    ]
-    chat(messages)
 
     csv_agent = create_pandas_dataframe_agent(llm=chat,
                                             df=df,
