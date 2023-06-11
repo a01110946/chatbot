@@ -16,7 +16,7 @@ import requests
 # OPENAI_API_KEY ENVIROMENTAL VARIABLE 
 import os
 import openai
-openai_api_key = st.secret["OPENAI_API_KEY"]
+openai_api_key = st.secrets["OPENAI_API_KEY"]
 # END ON ENVIRONMENTAL VARIABLE
 
 #AGREGADO PARA IMAGENES
