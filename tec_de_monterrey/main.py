@@ -82,7 +82,7 @@ def get_answer_csv(query: str) -> str:
     - answer (str): the answer to the query from the CSV file.
     """
 
-    agent = create_csv_agent(ChatOpenAI(temperature=0), verbose=True)
+    agent = create_csv_agent(ChatOpenAI(temperature=0), path='Corpus de información.csv', verbose=True)
 
     answer = agent.run(query)
     return answer
