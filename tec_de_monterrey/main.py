@@ -15,9 +15,9 @@ import requests
 import urllib.request
 
 # OPENAI_API_KEY ENVIROMENTAL VARIABLE 
-import os
-import openai
-openai_api_key = st.secrets["OPENAI_API_KEY"]
+#import os
+#import openai
+#openai_api_key = st.secrets["OPENAI_API_KEY"]
 # END ON ENVIRONMENTAL VARIABLE
 
 #AGREGADO PARA IMAGENES
