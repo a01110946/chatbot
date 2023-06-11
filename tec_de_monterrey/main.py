@@ -49,7 +49,7 @@ image = Image.open('logo_tec_de_monterrey')
 
 
 # GitHub file URL
-file_url = "https://raw.githubusercontent.com/a01110946/chatbot/main/tec_de_monterrey/Corpus_de_informacion_sin_plan_de_estudios.csv"
+file_url = "https://raw.githubusercontent.com/a01110946/chatbot/main/tec_de_monterrey/Carreras_profesionales_sin_plan_de_estudios.csv"
 
 # Send a GET request to download the file
 response = requests.get(file_url)
@@ -61,7 +61,7 @@ with open("Corpus_de_informacion_sin_plan_de_estudios.csv", "wb") as file:
 # Read the downloaded file using Pandas
 #df = pd.read_excel("Corpus_de_informacion.xlsx", sheet_name='Oferta académica', header=0, dtype={'Nombre del Programa': str, 'Tipo de Programa': str, 'Escuela': str, 'Campus': list, 'Duración': str, 'Periodo': str}, engine='openpyxl')
 #df = pd.read_csv(filepath_or_buffer='Corpus de información.csv', sep=";", header=0, encoding='latin-1')
-df = pd.read_csv(filepath_or_buffer='Corpus_de_informacion_sin_plan_de_estudios.csv', sep=",", header=0, encoding='latin-1')
+df = pd.read_csv(filepath_or_buffer='Carreras_profesionales_sin_plan_de_estudios.csv', sep=",", header=0, encoding='latin-1')
 
 
 # Split the values in the column based on comma and pipe delimiters
@@ -106,7 +106,7 @@ def get_answer_csv(query: str) -> str:
 
     csv_agent = create_pandas_dataframe_agent(llm=chat, df=df, prefix=prefix, verbose=True) #early_stopping_method="force", 
 
-    second_prompt = ChatPromptTemplate.from_template("You are a helpful assistant that translate text from English to Spanish {english_text}.")
+    second_prompt = ChatPromptTemplate.from_template("Eres un asistente virtual del Tec de Monterrey. Te gusta conversar, eres extenso en tus respuestas.")
     translator_chain = LLMChain(llm=chat, prompt=second_prompt)
 
     overall_simple_chain = SimpleSequentialChain(chains=[csv_agent, translator_chain], verbose=True)
