@@ -96,25 +96,6 @@ def get_answer_csv(query: str) -> str:
 
     return response
 
-'''
-def translation(response: str) -> str:
-
-    llm = Cohere(cohere_api_key=os.environ["COHERE_API_KEY"])
-    template = """Translate the given text from English to Spanish.
-
-    Text to translate: {response}
-    Translated text:"""
-    prompt = PromptTemplate(template=template, input_variables=["response"])
-
-    llm_chain = LLMChain(prompt=prompt, llm=llm)
-
-    translation = llm_chain.run(response)
-    
-    return translation
-'''
-#--------------------------------------------------------------------------------
-
-
 
 
 # SECCION DE ENCABEZADOS Y PANTALLA DE INICIO
@@ -154,8 +135,7 @@ user_input = get_text()
 
 if user_input:
     output = get_answer_csv(query=user_input)
-    #output = translation(data)
-    #agent_chain.run(input=user_input)
+
 
     st.session_state.past.append(user_input)
     st.session_state.generated.append(output)
