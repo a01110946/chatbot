@@ -4,6 +4,18 @@ from streamlit_chat import message
 
 from langchain.chains import ConversationChain
 from langchain.llms import OpenAI
+from langchain.schema import BaseOutputParser
+from typing import Any
+import re
+from langchain.agents.mrkl.prompt import FORMAT_INSTRUCTIONS
+from langchain.agents import ConversationalChatAgent
+from langchain.agents import AgentExecutor
+from langchain.schema import (
+    AIMessage,
+    HumanMessage,
+    SystemMessage,
+    BaseMessage,
+)
 
 from langchain.agents import create_pandas_dataframe_agent
 from langchain.chat_models import ChatOpenAI
@@ -75,7 +87,55 @@ Tool(
 
 memory = ConversationBufferMemory(memory_key="chat_history")
 
-agent_chain = initialize_agent(tools=tools, llm=ChatOpenAI(temperature=0), agent=AgentType.CONVERSATIONAL_REACT_DESCRIPTION, verbose=True, memory=memory)
+#------------------------------------------------------------------------------
+class NewAgentOutputParser(BaseOutputParser):
+    def get_format_instructions(self) -> str:
+        return FORMAT_INSTRUCTIONS
+
+    def parse(self, text: str) -> Any:
+        print("-" * 20)
+        cleaned_output = text.strip()
+        # Regex patterns to match action and action_input
+        action_pattern = r'"action":\s*"([^"]*)"'
+        action_input_pattern = r'"action_input":\s*"([^"]*)"'
+
+        # Extracting first action and action_input values
+        action = re.search(action_pattern, cleaned_output)
+        action_input = re.search(action_input_pattern, cleaned_output)
+
+        if action:
+            action_value = action.group(1)
+            print(f"First Action: {action_value}")
+        else:
+            print("Action not found")
+
+        if action_input:
+            action_input_value = action_input.group(1)
+            print(f"First Action Input: {action_input_value}")
+        else:
+            print("Action Input not found")
+
+        print("-" * 20)
+        if action_value and action_input_value:
+            return {"action": action_value, "action_input": action_input_value}
+#------------------------------------------------------------------------------
+def make_chain():
+    memory = ConversationBufferMemory(
+        memory_key="chat_history", return_messages=True)
+
+    agent = ConversationalChatAgent.from_llm_and_tools(
+        llm=ChatOpenAI(), tools=[], system_message=SystemMessage, memory=memory, verbose=True, output_parser=NewAgentOutputParser())
+
+    agent_chain = AgentExecutor.from_agent_and_tools(
+        agent=agent,
+        tools=tools,
+        memory=memory,
+        verbose=True,
+    )
+    return agent_chain
+#--------------------------------------------------------------------------------
+#agent_chain = initialize_agent(tools=tools, llm=ChatOpenAI(temperature=0), agent=AgentType.CONVERSATIONAL_REACT_DESCRIPTION, verbose=True, memory=memory)
+agent_chain = make_chain()
 
 # SECCION DE ENCABEZADOS Y PANTALLA DE INICIO
 # From here down is all the StreamLit UI.
