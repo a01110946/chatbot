@@ -96,6 +96,7 @@ def get_answer_csv(query: str) -> str:
 
     return response
 
+'''
 def translation(response: str) -> str:
 
     llm = Cohere(cohere_api_key=os.environ["COHERE_API_KEY"])
@@ -110,9 +111,7 @@ def translation(response: str) -> str:
     translation = llm_chain.run(response)
     
     return translation
-
-
-
+'''
 #--------------------------------------------------------------------------------
 
 
@@ -154,8 +153,8 @@ def get_text():
 user_input = get_text()
 
 if user_input:
-    data = get_answer_csv(query=user_input)
-    output = translation(data)
+    output = get_answer_csv(query=user_input)
+    #output = translation(data)
     #agent_chain.run(input=user_input)
 
     st.session_state.past.append(user_input)
