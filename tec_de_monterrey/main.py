@@ -23,6 +23,15 @@ response = requests.get(file_url)
 with open("Carreras_profesionales.csv", "wb") as file:
     file.write(response.content)
 
+#AGREGADO PARA IMAGENES
+from PIL import Image
+#aqui va la ruta real que pondremos en github
+#sustituir esta linea cuando la imagen la subas
+#image = Image.open('/users/sofia/downloads/tecnologico-de-monterrey-blue.png')
+urllib.request.urlretrieve('https://raw.githubusercontent.com/a01110946/chatbot/main/tec_de_monterrey/tecnologico_de_monterrey-blue.jpeg', 'logo_tec_de_monterrey')
+image = Image.open('logo_tec_de_monterrey')
+### FIN DE AGREGADO PARA IMAGENES
+
 
 # Read the downloaded file using Pandas
 #df = pd.read_excel("Corpus de información_v1.xlsx", sheet_name='Maestrías', header=0, dtype={'Maestría': str, 'Escuela': str, 'Universidad': str, 'Impartido en': list, 'Duración': str, 'Periodo': str}, engine='openpyxl')
@@ -57,9 +66,24 @@ memory = ConversationBufferMemory(memory_key="chat_history")
 
 agent_chain = initialize_agent(tools=tools, llm=ChatOpenAI(temperature=0), agent=AgentType.CONVERSATIONAL_REACT_DESCRIPTION, verbose=True, memory=memory)
 
+# SECCION DE ENCABEZADOS Y PANTALLA DE INICIO
 # From here down is all the StreamLit UI.
-st.set_page_config(page_title="Tec de Monterrey - Chatbot", page_icon=":robot:")
-st.header("Tec de Monterrey - Chatbot")
+st.set_page_config(page_title="Tec de Monterrey - Chatbot", page_icon=":robot:", layout="wide")
+st.image(image) #despliega el logo
+st.header('ChatBot del Tec de Monterrey')
+st.subheader('Asistente que contesta tus dudas generales')
+st.write("---")
+######
+
+st.sidebar.header('Hola, Bienvenido(a)')
+st.sidebar.markdown("""
+Esta App tiene por objeto contestar a tus dudas sobre las carreras 
+profesionales así como los posgrados que tiene el Tec de Monterrey.
+    
+Realiza la preguntas a nuestro Chatbot.
+""")
+###### FIN DE PANTALLA DE INICIO
+
 
 if "generated" not in st.session_state:
     st.session_state["generated"] = []
