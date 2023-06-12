@@ -12,6 +12,7 @@ from langchain.memory import ConversationBufferMemory
 from langchain.utilities import PythonREPL
 import pandas as pd
 import requests
+import urllib.request
 
 # GitHub file URL
 file_url = "https://raw.githubusercontent.com/a01110946/chatbot/main/tec_de_monterrey/Carreras_profesionales.csv"
