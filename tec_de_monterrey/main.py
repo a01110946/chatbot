@@ -15,13 +15,13 @@ import requests
 import urllib.request
 
 # GitHub file URL
-file_url = "https://raw.githubusercontent.com/a01110946/chatbot/main/tec_de_monterrey/Carreras_profesionales.csv"
+file_url = "https://raw.githubusercontent.com/a01110946/chatbot/main/tec_de_monterrey/Diplomados.csv"
 
 # Send a GET request to download the file
 response = requests.get(file_url)
 
 # Save the file locally
-with open("Carreras_profesionales.csv", "wb") as file:
+with open("Diplomados.csv", "wb") as file:
     file.write(response.content)
 
 #AGREGADO PARA IMAGENES
@@ -36,7 +36,7 @@ image = Image.open('logo_tec_de_monterrey')
 
 # Read the downloaded file using Pandas
 #df = pd.read_excel("Corpus de información_v1.xlsx", sheet_name='Maestrías', header=0, dtype={'Maestría': str, 'Escuela': str, 'Universidad': str, 'Impartido en': list, 'Duración': str, 'Periodo': str}, engine='openpyxl')
-df = pd.read_csv("Carreras_profesionales.csv", sep=",", encoding="latin-1")
+df = pd.read_csv("Diplomados.csv", sep=",", encoding="latin-1")
 
 # Split the values in the column based on comma delimiter
 df['Campus'] = df['Campus'].str.split('; ')
