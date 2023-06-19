@@ -21,7 +21,7 @@ file_url = "https://raw.githubusercontent.com/a01110946/chatbot/main/tec_de_mont
 response = requests.get(file_url)
 
 # Save the file locally
-with open("Becas.csv", "wb") as file:
+with open("Corpus_de_informacion.csv", "wb") as file:
     file.write(response.content)
 
 #AGREGADO PARA IMAGENES
@@ -39,10 +39,10 @@ image = Image.open('logo_tec_de_monterrey')
 df = pd.read_csv("Corpus_de_informacion.csv", sep=",", encoding="latin-1")
 
 # Split the values in the column based on comma delimiter
-#df['Plan de Estudios'] = df['Plan de Estudios'].str.split('|')
+df['Campus'] = df['Campus'].str.split(';')
 
 # Convert the split values into a list of strings
-#df['Plan de Estudios'] = df['Plan de Estudios'].apply(lambda x: [str(value).strip() for value in x])
+df['Campus'] = df['Campus'].apply(lambda x: [str(value).strip() for value in x])
 
 def tec_de_monterrey_agent_tool(input):
     pandas_agent = create_pandas_dataframe_agent(ChatOpenAI(model='gpt-4-32k-0613', temperature=0), df, verbose=True)
