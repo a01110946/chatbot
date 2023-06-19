@@ -45,7 +45,7 @@ df['Campus'] = df['Campus'].str.split(';')
 df['Campus'] = df['Campus'].apply(lambda x: [str(value).strip() for value in x])
 
 def tec_de_monterrey_agent_tool(input):
-    pandas_agent = create_pandas_dataframe_agent(ChatOpenAI(model='gpt-3.5-turbo-16k-0613', temperature=0), df, verbose=True)
+    pandas_agent = create_pandas_dataframe_agent(ChatOpenAI(model='gpt-3.5-turbo-16k', temperature=0), df, verbose=True)
     return pandas_agent.run(input)
 
 python_repl = PythonREPL()
