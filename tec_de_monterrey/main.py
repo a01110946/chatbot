@@ -15,7 +15,7 @@ import requests
 import urllib.request
 
 # GitHub file URL
-file_url = "https://raw.githubusercontent.com/a01110946/chatbot/main/tec_de_monterrey/Becas.csv"
+file_url = "https://raw.githubusercontent.com/a01110946/chatbot/main/tec_de_monterrey/Corpus_de_informacion.csv"
 
 # Send a GET request to download the file
 response = requests.get(file_url)
@@ -36,7 +36,7 @@ image = Image.open('logo_tec_de_monterrey')
 
 # Read the downloaded file using Pandas
 #df = pd.read_excel("Corpus de información_v1.xlsx", sheet_name='Maestrías', header=0, dtype={'Maestría': str, 'Escuela': str, 'Universidad': str, 'Impartido en': list, 'Duración': str, 'Periodo': str}, engine='openpyxl')
-df = pd.read_csv("Becas.csv", sep=",", encoding="latin-1")
+df = pd.read_csv("Corpus_de_informacion.csv", sep=",", encoding="latin-1")
 
 # Split the values in the column based on comma delimiter
 #df['Plan de Estudios'] = df['Plan de Estudios'].str.split('|')
@@ -45,7 +45,7 @@ df = pd.read_csv("Becas.csv", sep=",", encoding="latin-1")
 #df['Plan de Estudios'] = df['Plan de Estudios'].apply(lambda x: [str(value).strip() for value in x])
 
 def tec_de_monterrey_agent_tool(input):
-    pandas_agent = create_pandas_dataframe_agent(ChatOpenAI(temperature=0), df, verbose=True)
+    pandas_agent = create_pandas_dataframe_agent(ChatOpenAI(model='gpt-4-32k-0613', temperature=0), df, verbose=True)
     return pandas_agent.run(input)
 
 python_repl = PythonREPL()
