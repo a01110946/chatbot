@@ -10,4 +10,3 @@ cohere
 xlrd
 json
 re
-pydantic
