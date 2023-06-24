@@ -48,35 +48,6 @@ urllib.request.urlretrieve('https://raw.githubusercontent.com/a01110946/chatbot/
 image2 = Image.open('agent-image')
 ### FIN DE AGREGADO PARA IMAGENES
 
-# Read the downloaded file using Pandas
-#df = pd.read_excel("Corpus de información_v1.xlsx", sheet_name='Maestrías', header=0, dtype={'Maestría': str, 'Escuela': str, 'Universidad': str, 'Impartido en': list, 'Duración': str, 'Periodo': str}, engine='openpyxl')
-df = pd.read_csv("Corpus_de_informacion.csv", sep=",", encoding="latin-1")
-
-# Split the values in the column based on comma delimiter
-df['Campus'] = df['Campus'].str.split(';')
-
-# Convert the split values into a list of strings
-df['Campus'] = df['Campus'].apply(lambda x: [str(value).strip() for value in x])
-
-def tec_de_monterrey_agent_tool(input):
-    pandas_agent = create_pandas_dataframe_agent(ChatOpenAI(model='gpt-3.5-turbo-16k', temperature=0), df, verbose=True)
-    return pandas_agent.run(input)
-
-python_repl = PythonREPL()
-
-tools = [
-Tool(
-    name="Tecnológico de Monterrey Agent",
-    func=tec_de_monterrey_agent_tool,
-    description="A tool to retrieve information from Tec de Monterrey. Always assume you need to use this tool to get information from the Tec. Always answer in Spanish.",
-),
-Tool(
-    name="python_repl",
-    description="A Python shell. Use this to execute python commands. Input should be a valid python command. If you want to see the output of a value, you should print it out with `print(...)`.",
-    func=python_repl.run
-)
-]
-
 
 # SECCION DE ENCABEZADOS Y PANTALLA DE INICIO
 # From here down is all the StreamLit UI.
@@ -91,109 +62,75 @@ with st.container():
                     de estudio en el Tecnológico de Monterrey
                     """)
     with right_column:
-        st.image(image2,use_column_width='auto')#despliega imagen
+        st.image(image2,use_column_width='auto') #despliega imagen
         
-
 ##### PRUEBA #####
-class NewAgentOutputParser(BaseOutputParser):
-    def get_format_instructions(self) -> str:
-        FORMAT_INSTRUCTIONS = """RESPONSE FORMAT INSTRUCTIONS
-        ----------------------------
 
-        When responding to me please, please output a response in one of two formats:
 
-        **Option 1:**
-        Use this if you want the human to use a tool.
-        Markdown code snippet formatted in the following schema:
+SYSTEM_MESSAGE = """Asistente es un asesor que responde preguntas del Tec de Monterrey.
 
-        ```json
-        {{{{
-            "action": string \\ The action to take. Must be one of {tool_names}
-            "action_input": string \\ The input to the action
-        }}}}
-        ```
+Cuando le preguntes algo, te responderá en base a la siguiente información disponible:
 
-        **Option #2:**
-        Use this if you want to respond directly to the human. Markdown code snippet formatted in the following schema:
+El Tec de Monterrey ofrece las siguientes carreras en Campus Guadalajara:
+* ARQ-Arquitectura
+* IC-Ingeniería Civil
+* LED-Licenciatura en Derecho
+* LRI-Licenciatura en Relaciones Internacionales
+* LAD-Licenciatura en Arte Digital
+* LC-Licenciatura en Comunicación
+* LDI-Licenciatura en Diseño
+* LTM-Licenciatura en Tecnología y Producción Musical
+* IDM-Ingeniería en Ciencia de Datos y Matemáticas
+* IBT-Ingeniería en Biotecnología
+* IQ-Ingeniería Química
+* IRS-Ingeniería en Robótica y Sistemas Digitales
+* ITC-Ingeniería en Tecnologías Computacionales
+* IID-Ingeniería en Innovación y Desarrollo
+* IIS-Ingeniería Industrial y de Sistemas
+* IM-Ingeniería Mecánica
+* IMD-Ingeniería Biomédica
+* IMT-Ingeniería en Mecatrónica
+* LAET-Licenciatura en Estrategia y Transformación de Negocios
+* LAF-Licenciatura en Finanzas
+* LCPF-Licenciatura en Contaduría Pública y Finanzas
+* LDE-Licenciatura en Emprendimiento
+* LEM-Licenciatura en Mercadotecnia
+* LIT-Licenciatura en Inteligencia de Negocios
+* LBC-Licenciatura en Biociencias
+* LNB-Licenciatura en Nutrición y Bienestar Integral
+* LPS-Licenciatura en Psicología Clínica y de la Salud
+* MC-Médico Cirujano
+* MO-Médico Cirujano Odontólogo
 
-        ```json
-        {{{{
-            "action": "Final Answer",
-            "action_input": string \\ You should put what you want to return to use here
-        }}}}
-        ```"""
-        return FORMAT_INSTRUCTIONS
+El Tec de Monterrey ofrece las siguientes maestrías en Campus Guadalajara:
+* Maestría en Gestión de la Ingeniería (MEM)
+* Maestría en Ciberseguridad (MCY-M)
+* Maestría en Arquitectura y Diseño Urbano (MDU-M)
+* Maestría en Administración y Dirección de Empresas (tiempo parcial) (MBA)
 
-    def parse(self, text: str) -> Any:
-        print("-" * 20)
-        cleaned_output = text.strip()
-        # Regex patterns to match action and action_input
-        action_pattern = r'"action":\s*"([^"]*)"'
-        action_input_pattern = r'"action_input":\s*"([^"]*)"'
-
-        # Extracting first action and action_input values
-        action = re.search(action_pattern, cleaned_output)
-        action_input = re.search(action_input_pattern, cleaned_output)
-
-        if action:
-            action_value = action.group(1)
-            print(f"First Action: {action_value}")
-        else:
-            print("Action not found")
-
-        if action_input:
-            action_input_value = action_input.group(1)
-            print(f"First Action Input: {action_input_value}")
-        else:
-            print("Action Input not found")
-
-        print("-" * 20)
-        if action_value and action_input_value:
-            return {"action": action_value, "action_input": action_input_value}
-
-        # Problematic code left just in case
-        if "```json" in cleaned_output:
-            _, cleaned_output = cleaned_output.split("```json")
-        if "```" in cleaned_output:
-            cleaned_output, _ = cleaned_output.split("```")
-        if cleaned_output.startswith("```json"):
-            cleaned_output = cleaned_output[len("```json"):]
-        if cleaned_output.startswith("```"):
-            cleaned_output = cleaned_output[len("```"):]
-        if cleaned_output.endswith("```"):
-            cleaned_output = cleaned_output[: -len("```")]
-        cleaned_output = cleaned_output.strip()
-        response = json.loads(cleaned_output)
-        return {"action": response["action"], "action_input": response["action_input"]}
-        # end of problematic code
-
-SYSTEM_MESSAGE = """Assistant is a large language model trained by OpenAI.
-
-Assistant is designed to be able to assist with a wide range of tasks, from answering simple questions to providing in-depth explanations and discussions on a wide range of topics. As a language model, Assistant is able to generate human-like text based on the input it receives, allowing it to engage in natural-sounding conversations and provide responses that are coherent and relevant to the topic at hand.
-
-Assistant is constantly learning and improving, and its capabilities are constantly evolving. It is able to process and understand large amounts of text, and can use this knowledge to provide accurate and informative responses to a wide range of questions. Additionally, Assistant is able to generate its own text based on the input it receives, allowing it to engage in discussions and provide explanations and descriptions on a wide range of topics.
-
-Overall, Assistant is a powerful system that can help with a wide range of tasks and provide valuable insights and information on a wide range of topics. Whether you need help with a specific question or just want to have a conversation about a particular topic, Assistant is here to assist."""
+El Tec de Monterrey ofrece los  siguientes doctorados en Campus Guadalajara:
+* Doctorado en Ciencias de Ingeniería (DCI)
+* Doctorado en Biotecnología (DBT)
+* Doctorado en Ciencias Computacionales (DCC)
+* Doctorado en Ciencias Clínicas (DCL)
+"""
 
 def make_chain():
     memory = ConversationBufferMemory(
         memory_key="chat_history", return_messages=True)
 
     agent = ConversationalChatAgent.from_llm_and_tools(
-        llm=ChatOpenAI(), tools=[], system_message=SYSTEM_MESSAGE, memory=memory, verbose=True, output_parser=NewAgentOutputParser())
+        llm=ChatOpenAI(), tools=[], system_message=SYSTEM_MESSAGE, memory=memory, verbose=True)
 
     agent_chain = AgentExecutor.from_agent_and_tools(
         agent=agent,
-        tools=tools,
+        tools=[],
         memory=memory,
         verbose=True,
     )
     return agent_chain
 
-
 #### TERMINA PRUEBA ####
-
-
 
 
 st.write("---")
@@ -224,7 +161,7 @@ def get_text():
 user_input = get_text()
 
 if user_input:
-    output = make_chain().run(input=user_input)
+    output = agent_chain.run(input=user_input)
 
     st.session_state.past.append(user_input)
     st.session_state.generated.append(output)
