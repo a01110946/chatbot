@@ -112,7 +112,7 @@ if "past" not in st.session_state:
 
 
 def get_text():
-    input_text = st.text_input("Tú: ", "Hola, ¿cómo estás?", key="input")
+    input_text = st.text_input("Tú: ", "Hola, tengo algunas preguntas sobre la oferta académica del Tec, ¿podrías ayudarme?", key="input")
     return input_text
 
 
