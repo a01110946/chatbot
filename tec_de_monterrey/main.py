@@ -108,13 +108,12 @@ El Tec de Monterrey ofrece los  siguientes doctorados en Campus Guadalajara:
 * Doctorado en Ciencias Computacionales (DCC)
 * Doctorado en Ciencias Clínicas (DCL)
 
-{history}
 Human: {human_input}
 Assistant:
 """
 
 
-prompt = PromptTemplate(input_variables=["history", "human_input"], template=SYSTEM_MESSAGE)
+prompt = PromptTemplate(input_variables=["human_input"], template=SYSTEM_MESSAGE)
 
 
 chatgpt_chain = LLMChain(
