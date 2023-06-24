@@ -36,13 +36,6 @@ urllib.request.urlretrieve('https://raw.githubusercontent.com/a01110946/chatbot/
 image2 = Image.open('agent-image')
 ### FIN DE AGREGADO PARA IMAGENES
 
-# Use local CSS
-def local_css(file_name):
-    with open(file_name) as f:
-        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
-
-#local_css("/Users/sofia/Downloads/style/style.css")
-
 # Read the downloaded file using Pandas
 #df = pd.read_excel("Corpus de información_v1.xlsx", sheet_name='Maestrías', header=0, dtype={'Maestría': str, 'Escuela': str, 'Universidad': str, 'Impartido en': list, 'Duración': str, 'Periodo': str}, engine='openpyxl')
 df = pd.read_csv("Corpus_de_informacion.csv", sep=",", encoding="latin-1")
@@ -63,7 +56,7 @@ tools = [
 Tool(
     name="Tecnológico de Monterrey Agent",
     func=tec_de_monterrey_agent_tool,
-    description="A tool to retrieve information from Tecnológico de Monterrey. Always assume you need to use this tool to get information from the Tec. Always answer in Spanish.",
+    description="A tool to retrieve information from Tec de Monterrey. Always assume you need to use this tool to get information from the Tec. Always answer in Spanish.",
 ),
 Tool(
     name="python_repl",
