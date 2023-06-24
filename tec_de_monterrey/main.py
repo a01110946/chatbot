@@ -10,6 +10,18 @@ from langchain.chat_models import ChatOpenAI
 from langchain.agents import Tool, AgentType, initialize_agent
 from langchain.memory import ConversationBufferMemory
 from langchain.utilities import PythonREPL
+from langchain.agents.conversational_chat import ConversationalChatAgent
+from langchain.schema import BaseOutputParser
+from langchain.agents.agent import AgentExecutor
+from langchain.schema import (
+    AIMessage,
+    HumanMessage,
+    SystemMessage
+)
+import json
+from pydantic import Any
+from langchain.output_parsers import PydanticOutputParser
+import re
 import pandas as pd
 import requests
 import urllib.request
@@ -65,9 +77,6 @@ Tool(
 )
 ]
 
-memory = ConversationBufferMemory(memory_key="chat_history")
-
-agent_chain = initialize_agent(tools=tools, llm=ChatOpenAI(temperature=0), agent=AgentType.CONVERSATIONAL_REACT_DESCRIPTION, verbose=True, memory=memory)
 
 # SECCION DE ENCABEZADOS Y PANTALLA DE INICIO
 # From here down is all the StreamLit UI.
@@ -84,6 +93,78 @@ with st.container():
     with right_column:
         st.image(image2,use_column_width='auto')#despliega imagen
         
+
+##### PRUEBA #####
+class NewAgentOutputParser(BaseOutputParser):
+    def get_format_instructions(self) -> str:
+        parser = PydanticOutputParser()
+        FORMAT_INSTRUCTIONS = parser.get_format_instructions()
+        return FORMAT_INSTRUCTIONS
+
+    def parse(self, text: str) -> Any:
+        print("-" * 20)
+        cleaned_output = text.strip()
+        # Regex patterns to match action and action_input
+        action_pattern = r'"action":\s*"([^"]*)"'
+        action_input_pattern = r'"action_input":\s*"([^"]*)"'
+
+        # Extracting first action and action_input values
+        action = re.search(action_pattern, cleaned_output)
+        action_input = re.search(action_input_pattern, cleaned_output)
+
+        if action:
+            action_value = action.group(1)
+            print(f"First Action: {action_value}")
+        else:
+            print("Action not found")
+
+        if action_input:
+            action_input_value = action_input.group(1)
+            print(f"First Action Input: {action_input_value}")
+        else:
+            print("Action Input not found")
+
+        print("-" * 20)
+        if action_value and action_input_value:
+            return {"action": action_value, "action_input": action_input_value}
+
+        # Problematic code left just in case
+        if "```json" in cleaned_output:
+            _, cleaned_output = cleaned_output.split("```json")
+        if "```" in cleaned_output:
+            cleaned_output, _ = cleaned_output.split("```")
+        if cleaned_output.startswith("```json"):
+            cleaned_output = cleaned_output[len("```json"):]
+        if cleaned_output.startswith("```"):
+            cleaned_output = cleaned_output[len("```"):]
+        if cleaned_output.endswith("```"):
+            cleaned_output = cleaned_output[: -len("```")]
+        cleaned_output = cleaned_output.strip()
+        response = json.loads(cleaned_output)
+        return {"action": response["action"], "action_input": response["action_input"]}
+        # end of problematic code
+
+def make_chain():
+    memory = ConversationBufferMemory(
+        memory_key="chat_history", return_messages=True)
+
+    agent = ConversationalChatAgent.from_llm_and_tools(
+        llm=ChatOpenAI(), tools=[], memory=memory, verbose=True, output_parser=NewAgentOutputParser())
+
+    agent_chain = AgentExecutor.from_agent_and_tools(
+        agent=agent,
+        tools=tools,
+        memory=memory,
+        verbose=True,
+    )
+    return agent_chain
+
+
+#### TERMINA PRUEBA ####
+
+
+
+
 st.write("---")
 ######
 
@@ -112,7 +193,7 @@ def get_text():
 user_input = get_text()
 
 if user_input:
-    output = agent_chain.run(input=user_input)
+    output = make_chain().run(input=user_input)
 
     st.session_state.past.append(user_input)
     st.session_state.generated.append(output)
