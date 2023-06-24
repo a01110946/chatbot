@@ -31,8 +31,17 @@ from PIL import Image
 #image = Image.open('/users/sofia/downloads/tecnologico-de-monterrey-blue.png')
 urllib.request.urlretrieve('https://raw.githubusercontent.com/a01110946/chatbot/main/tec_de_monterrey/tecnologico_de_monterrey-blue.jpeg', 'logo_tec_de_monterrey')
 image = Image.open('logo_tec_de_monterrey')
+
+urllib.request.urlretrieve('https://raw.githubusercontent.com/a01110946/chatbot/main/tec_de_monterrey/agent-image.jpg', 'agent-image')
+image2 = Image.open('agent-image')
 ### FIN DE AGREGADO PARA IMAGENES
 
+# Use local CSS
+def local_css(file_name):
+    with open(file_name) as f:
+        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+
+#local_css("/Users/sofia/Downloads/style/style.css")
 
 # Read the downloaded file using Pandas
 #df = pd.read_excel("Corpus de información_v1.xlsx", sheet_name='Maestrías', header=0, dtype={'Maestría': str, 'Escuela': str, 'Universidad': str, 'Impartido en': list, 'Duración': str, 'Periodo': str}, engine='openpyxl')
@@ -69,10 +78,19 @@ agent_chain = initialize_agent(tools=tools, llm=ChatOpenAI(temperature=0), agent
 
 # SECCION DE ENCABEZADOS Y PANTALLA DE INICIO
 # From here down is all the StreamLit UI.
-st.set_page_config(page_title="Tec de Monterrey - Chatbot", page_icon=":robot:", layout="wide")
-st.image(image) #despliega el logo
-st.header('ChatBot del Tec de Monterrey')
-st.subheader('Asistente que contesta tus dudas generales')
+#st.set_page_config(page_title="Tec de Monterrey - Chatbot", page_icon=":robot:", layout="wide")
+with st.container():  
+    left_column, right_column = st.columns(2)
+    with left_column:
+        st.image(image,use_column_width='auto')#despliega logo
+        st.header('InfoChat Tec')
+        st.markdown("""
+                    Podemos ayudarte con todo lo que necesitas saber a cerca de los programas 
+                    de estudio en el Tecnológico de Monterrey
+                    """)
+    with right_column:
+        st.image(image2,use_column_width='auto')#despliega imagen
+        
 st.write("---")
 ######
 
