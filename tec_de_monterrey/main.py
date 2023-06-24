@@ -3,14 +3,13 @@ import streamlit as st
 from streamlit_chat import message
 
 from langchain.chains import ConversationChain
-from langchain.llms import OpenAI
-
+from langchain import OpenAI, ConversationChain, LLMChain, PromptTemplate
+from langchain.memory import ConversationBufferWindowMemory
 from langchain.agents import create_pandas_dataframe_agent
 from langchain.chat_models import ChatOpenAI
 from langchain.agents import Tool, AgentType, initialize_agent
 from langchain.memory import ConversationBufferMemory
 from langchain.utilities import PythonREPL
-from langchain.agents.conversational_chat import ConversationalChatAgent
 from langchain.schema import BaseOutputParser
 from langchain.agents.agent import AgentExecutor
 from langchain.schema import (
@@ -67,7 +66,7 @@ with st.container():
 ##### PRUEBA #####
 
 
-SYSTEM_MESSAGE = """Asistente es un asesor que responde preguntas del Tec de Monterrey.
+SYSTEM_MESSAGE = """Assistant es un asesor que responde preguntas del Tec de Monterrey.
 
 Cuando le preguntes algo, te responderá en base a la siguiente información disponible:
 
@@ -113,22 +112,24 @@ El Tec de Monterrey ofrece los  siguientes doctorados en Campus Guadalajara:
 * Doctorado en Biotecnología (DBT)
 * Doctorado en Ciencias Computacionales (DCC)
 * Doctorado en Ciencias Clínicas (DCL)
+
+{history}
+Human: {human_input}
+Assistant:
 """
 
-def make_chain():
-    memory = ConversationBufferMemory(
-        memory_key="chat_history", return_messages=True)
 
-    agent = ConversationalChatAgent.from_llm_and_tools(
-        llm=ChatOpenAI(), tools=[], system_message=SYSTEM_MESSAGE, memory=memory, verbose=True)
+prompt = PromptTemplate(input_variables=["history", "human_input"], template=SYSTEM_MESSAGE)
 
-    agent_chain = AgentExecutor.from_agent_and_tools(
-        agent=agent,
-        tools=[],
-        memory=memory,
-        verbose=True,
-    )
-    return agent_chain
+
+chatgpt_chain = LLMChain(
+    llm=ChatOpenAI(temperature=0),
+    prompt=prompt,
+    verbose=True,
+    memory=ConversationBufferMemory(
+        memory_key="chat_history", return_messages=True),
+    verbose=True
+)
 
 #### TERMINA PRUEBA ####
 
@@ -161,7 +162,7 @@ def get_text():
 user_input = get_text()
 
 if user_input:
-    output = agent_chain.run(input=user_input)
+    output = chatgpt_chain.predict(human_input=user_input)
 
     st.session_state.past.append(user_input)
     st.session_state.generated.append(output)
