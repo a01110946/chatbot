@@ -8,5 +8,4 @@ openpyxl
 tabulate
 cohere
 xlrd
-json
 re
