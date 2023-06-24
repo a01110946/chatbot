@@ -29,10 +29,10 @@ from PIL import Image
 #aqui va la ruta real que pondremos en github
 #sustituir esta linea cuando la imagen la subas
 #image = Image.open('/users/sofia/downloads/tecnologico-de-monterrey-blue.png')
-urllib.request.urlretrieve('https://raw.githubusercontent.com/a01110946/chatbot/main/tec_de_monterrey/tecnologico_de_monterrey-blue.jpeg', 'logo_tec_de_monterrey')
+urllib.request.urlretrieve('https://raw.githubusercontent.com/a01110946/chatbot/main/tec_de_monterrey/logo-tec.png', 'logo_tec_de_monterrey')
 image = Image.open('logo_tec_de_monterrey')
 
-urllib.request.urlretrieve('https://raw.githubusercontent.com/a01110946/chatbot/main/tec_de_monterrey/agent-image.jpg', 'agent-image')
+urllib.request.urlretrieve('https://raw.githubusercontent.com/a01110946/chatbot/main/tec_de_monterrey/agent-v1.png', 'agent-image')
 image2 = Image.open('agent-image')
 ### FIN DE AGREGADO PARA IMAGENES
 
