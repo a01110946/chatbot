@@ -21,7 +21,7 @@ with open("Corpus_de_informacion.csv", "wb") as file:
 df = pd.read_csv('Corpus_de_informacion.csv', encoding='ISO-8859-1')
 
 # Set LLM and Pandas DataFram Agent using OpenAI Functions.
-llm = ChatOpenAI(verbose=True, model="gpt-3.5-turbo-16k", temperature=0, request_timeout=120, max_retries=2)
+llm = ChatOpenAI(verbose=True, model="gpt-3.5-turbo-16k", temperature=0, openai_api_key=st.secrets["OPENAI_API_KEY"], request_timeout=120, max_retries=2)
 agent = create_pandas_dataframe_agent(llm, df, agent_type=AgentType.OPENAI_FUNCTIONS)
 
 
