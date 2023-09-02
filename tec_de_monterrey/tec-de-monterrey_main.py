@@ -7,9 +7,20 @@ import requests
 import urllib.request
 from PIL import Image
 
+# GitHub file URL
+file_url = "https://raw.githubusercontent.com/a01110946/chatbot/main/tec_de_monterrey/Corpus_de_informacion.csv"
+
+# Send a GET request to download the file
+response = requests.get(file_url)
+
+# Save the file locally
+with open("Corpus_de_informacion.csv", "wb") as file:
+    file.write(response.content)
+
+# Read CSV file and load Pandas DataFrame
 df = pd.read_csv('Corpus_de_informacion.csv')
 
-
+# Set LLM and Pandas DataFram Agent using OpenAI Functions.
 llm = ChatOpenAI(verbose=True, model="gpt-3.5-turbo-16k", temperature=0, request_timeout=120, max_retries=2)
 agent = create_pandas_dataframe_agent(llm, df, agent_type=AgentType.OPENAI_FUNCTIONS)
 
