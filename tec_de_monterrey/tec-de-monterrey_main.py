@@ -24,14 +24,7 @@ df = pd.read_csv('Corpus_de_informacion.csv', encoding='ISO-8859-1')
 llm = ChatOpenAI(verbose=True, model="gpt-3.5-turbo-16k", temperature=0, openai_api_key=st.secrets["OPENAI_API_KEY"], request_timeout=120, max_retries=2)
 agent = create_pandas_dataframe_agent(llm, df, agent_type=AgentType.OPENAI_FUNCTIONS)
 
-
-#from langsmith import Client
-#client = Client()
-#def send_feedback(run_id, score):
-    #client.create_feedback(run_id, "user_score", score=score)
-
 ####
-#image = Image.open('/users/sofia/downloads/tecnologico-de-monterrey-blue.png')
 urllib.request.urlretrieve('https://raw.githubusercontent.com/a01110946/chatbot/main/tec_de_monterrey/logo-tec.png', 'logo_tec_de_monterrey')
 image = Image.open('logo_tec_de_monterrey')
 
@@ -53,12 +46,23 @@ with st.container():
                     Tecnológico de Monterrey's curriculum.
                     """)
     with right_column:
-        st.image(image2,use_column_width='auto') #despliega imagen
+        st.image(image2,use_column_width='auto')
+
+######
+
+st.sidebar.header('Hi, welcome!')
+st.sidebar.markdown("""
+The app's goal is to answer your questions regarding professional careers
+and postgraduate courses offered by Tecnológico de Monterrey.
+    
+Ask questions to our Chatbot.
+""")
+
 ####
 
 #st.set_page_config(page_title='Tec Chatbot')
 st.title('Tec Chatbot')
-st.info("Most 'question answering' applications run over unstructured text data. But a lot of the data in the world is tabular data! This is an attempt to create an application using [LangChain](https://github.com/langchain-ai/langchain) to let you ask questions of data in tabular format. For this demo application, we will use the Titanic Dataset. Please explore it [here](https://github.com/datasciencedojo/datasets/blob/master/titanic.csv) to get a sense for what questions you can ask. Please leave feedback on well the question is answered, and we will use that improve the application!")
+	st.info("The majority of "question-answering" software operates on unstructured textual information. However, much of the world's data is actually in table form. We've developed a demo application that allows you to pose questions to data organized in tables. For this demonstration, I'm utilizing a custom dataset sourced from Tecnológico de Monterrey's official website. To get an idea of the types of questions you can ask, feel free to explore the dataset [here](https://github.com/a01110946/chatbot/blob/main/tec_de_monterrey/Corpus_de_informacion.csv). This dataset was prepared for question answering in Spanish for a Latin American audience, however, due to the ability Large Language Models have to translate language, feel free to ask your questions in English.\n\nPlease note that this application is unofficial and not affiliated with Tecnológico de Monterrey. Its sole aim is to demonstrate how Large Language Models can query tabular data.")
 
 query_text = st.text_input('Enter your question:', placeholder = 'In which campus is architecture offered?')
 # Form input and query
