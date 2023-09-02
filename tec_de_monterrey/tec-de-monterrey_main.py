@@ -3,9 +3,15 @@ import streamlit as st
 from langchain.chat_models import ChatOpenAI
 from langchain.agents.agent_toolkits import create_pandas_dataframe_agent
 from langchain.agents.agent_types import AgentType
+from langchain.memory import ConversationBufferMemory
 import requests
-import urllib.request
 from PIL import Image
+
+# Initialize session state for conversation history
+if "generated" not in st.session_state:
+    st.session_state["generated"] = []
+if "past" not in st.session_state:
+    st.session_state["past"] = []
 
 # GitHub file URL
 file_url = "https://raw.githubusercontent.com/a01110946/chatbot/main/tec_de_monterrey/Corpus_de_informacion.csv"
@@ -20,21 +26,17 @@ with open("Corpus_de_informacion.csv", "wb") as file:
 # Read CSV file and load Pandas DataFrame
 df = pd.read_csv('Corpus_de_informacion.csv', encoding='ISO-8859-1')
 
-# Set LLM and Pandas DataFram Agent using OpenAI Functions.
+# Initialize LLM and Pandas DataFram Agent using OpenAI Functions.
 llm = ChatOpenAI(verbose=True, model="gpt-3.5-turbo-16k", temperature=0, openai_api_key=st.secrets["OPENAI_API_KEY"], request_timeout=120, max_retries=2)
-agent = create_pandas_dataframe_agent(llm, df, agent_type=AgentType.OPENAI_FUNCTIONS)
+agent = create_pandas_dataframe_agent(llm, df, agent_type=AgentType.OPENAI_FUNCTIONS, memory=ConversationBufferMemory(memory_key="chat_history", return_messages=True))
 
-####
 urllib.request.urlretrieve('https://raw.githubusercontent.com/a01110946/chatbot/main/tec_de_monterrey/logo-tec.png', 'logo_tec_de_monterrey')
 image = Image.open('logo_tec_de_monterrey')
 
 urllib.request.urlretrieve('https://raw.githubusercontent.com/a01110946/chatbot/main/tec_de_monterrey/agent-v1.png', 'agent-image')
 image2 = Image.open('agent-image')
-### FIN DE AGREGADO PARA IMAGENES
 
-
-# SECCION DE ENCABEZADOS Y PANTALLA DE INICIO
-# From here down is all the StreamLit UI.
+# Streamlit UI.
 st.set_page_config(page_title="Tec de Monterrey - Chatbot", page_icon=":robot:", layout="wide")
 with st.container():  
     left_column, right_column = st.columns(2)
@@ -45,8 +47,6 @@ with st.container():
     with right_column:
         st.image(image2,use_column_width='auto')
 
-######
-
 st.sidebar.header('Hi, welcome!')
 st.sidebar.markdown("""
 The app's goal is to answer your questions regarding professional careers
@@ -55,14 +55,13 @@ and postgraduate courses offered by Tecnológico de Monterrey.
 Ask questions to our Chatbot.
 """)
 
-####
-
 #st.set_page_config(page_title='Tec Chatbot')
 st.title('Tec Chatbot')
 st.info("TecChat Bot can provide answers to most of your questions regarding Tecnológico de Monterrey's curriculum.")
 
 query_text = st.text_input('Enter your question:', placeholder = 'In which campus is architecture offered?')
-# Form input and query
+
+# Submit question and information query
 result = None
 with st.form('myform', clear_on_submit=True):
 	submitted = st.form_submit_button('Submit')
@@ -70,14 +69,14 @@ with st.form('myform', clear_on_submit=True):
 		with st.spinner('Calculating...'):
 			response = agent({"input": query_text}, include_run_info=True)
 			result = response["output"]
-			run_id = response["__run"].run_id
+            		st.session_state.past.append(query_text)
+            		st.session_state.generated.append(result)
+			#run_id = response["__run"].run_id
 if result is not None:
 	st.info(result)
 	
-	#col_blank, col_text, col1, col2 = st.columns([10, 2,1,1])
-	#with col_text:
-		#st.text("Feedback:")
-	#with col1:
-		#st.button("👍", on_click=send_feedback, args=(run_id, 1))
-	#with col2:
-		#st.button("👎", on_click=send_feedback, args=(run_id, 0))
+# Display past conversation
+if st.session_state["generated"]:
+    for i in range(len(st.session_state["generated"]) - 1, -1, -1):
+        st.write(f"User: {st.session_state['past'][i]}")
+        st.write(f"Bot: {st.session_state['generated'][i]}")
