@@ -64,14 +64,14 @@ query_text = st.text_input('Enter your question:', placeholder = 'In which campu
 # Submit question and information query
 result = None
 with st.form('myform', clear_on_submit=True):
-	submitted = st.form_submit_button('Submit')
-	if submitted:
-		with st.spinner('Calculating...'):
-			response = agent({"input": query_text}, include_run_info=True)
-			result = response["output"]
-            		st.session_state.past.append(query_text)
-            		st.session_state.generated.append(result)
-			#run_id = response["__run"].run_id
+    submitted = st.form_submit_button('Submit')
+    if submitted:
+        with st.spinner('Calculating...'):
+            response = agent({"input": query_text}, include_run_info=True)
+            result = response["output"]
+            st.session_state.past.append(query_text)
+            st.session_state.generated.append(result)
+            #run_id = response["__run"].run_id
 if result is not None:
 	st.info(result)
 	
