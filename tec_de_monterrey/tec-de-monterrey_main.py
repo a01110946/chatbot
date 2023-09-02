@@ -79,5 +79,5 @@ if result is not None:
 # Display past conversation
 if st.session_state["generated"]:
     for i in range(len(st.session_state["generated"]) - 1, -1, -1):
-        st.write(f"User: {st.session_state['past'][i]}")
         st.write(f"Bot: {st.session_state['generated'][i]}")
+	st.write(f"User: {st.session_state['past'][i]}")
