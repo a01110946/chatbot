@@ -4,6 +4,7 @@ from langchain.chat_models import ChatOpenAI
 from langchain.agents.agent_toolkits import create_pandas_dataframe_agent
 from langchain.agents.agent_types import AgentType
 from langchain.memory import ConversationBufferMemory
+from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 import requests
 import urllib.request
 from PIL import Image
@@ -43,7 +44,7 @@ with open("Tecnologico-de-Monterrey_Curriculum.csv", "wb") as file:
 df = pd.read_csv('Tecnologico-de-Monterrey_Curriculum.csv', encoding='ISO-8859-1')
 
 # Initialize LLM and Pandas DataFram Agent using OpenAI Functions.
-llm = ChatOpenAI(verbose=True, model="gpt-3.5-turbo-16k", temperature=0, openai_api_key=st.secrets["OPENAI_API_KEY"], request_timeout=120, max_retries=2, streaming=True)
+llm = ChatOpenAI(verbose=True, model="gpt-3.5-turbo-16k", temperature=0, openai_api_key=st.secrets["OPENAI_API_KEY"], request_timeout=120, max_retries=2, streaming=True, callbacks=[StreamingStdOutCallbackHandler()])
 agent = create_pandas_dataframe_agent(llm, df, agent_type=AgentType.OPENAI_FUNCTIONS, memory=ConversationBufferMemory(memory_key="chat_history", return_messages=True))
 
 # Initialize chat history
@@ -65,7 +66,12 @@ if prompt := st.chat_input("What is up?"):
     # Display assistant response in chat message container
     with st.chat_message("assistant"):
         message_placeholder = st.empty()
-        response = agent({"input": prompt})
-        full_response = response["output"]
+        full_response = ""
+
+        # Modify this section to handle streaming
+        for response in agent({"input": prompt}, stream=True):  # Add the stream=True parameter
+            full_response += response["output"]
+            message_placeholder.markdown(full_response + "▌")  # Add a cursor to indicate it's still typing
+            
         message_placeholder.markdown(full_response)
     st.session_state.messages.append({"role": "assistant", "content": full_response})
