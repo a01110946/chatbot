@@ -15,7 +15,7 @@ if "past" not in st.session_state:
     st.session_state["past"] = []
 
 # GitHub file URL
-file_url = "https://raw.githubusercontent.com/a01110946/chatbot/main/tec_de_monterrey/Corpus_de_informacion.csv"
+file_url = "https://raw.githubusercontent.com/a01110946/chatbot/main/tec_de_monterrey/Tecnologico-de-Monterrey_Curriculum.csv"
 
 # Send a GET request to download the file
 response = requests.get(file_url)
@@ -44,7 +44,7 @@ with st.container():
     with left_column:
         st.image(image,use_column_width='auto')#despliega logo
         st.header('Tec ChatBot')
-        st.markdown("Many \"question-answering\" tools focus on unstructured text, yet much data is tabular. We've created a demo app to query table-based data using a dataset from Tecnológico de Monterrey's website. Although the dataset is tailored for Spanish queries for a Latin American audience, you can ask in English due to the translation capabilities of Large Language Models. Take a look at the dataset [here](https://github.com/a01110946/chatbot/blob/main/tec_de_monterrey/Corpus_de_informacion.csv) so you know what type of questions you can ask!\n\nThis app is unofficial and not tied to Tecnológico de Monterrey; it showcases how Large Language Models interact with tabular data.")
+        st.markdown("Many \"question-answering\" tools focus on unstructured text, yet much data is tabular. We've created a demo app to query table-based data using a dataset from Tecnológico de Monterrey's website. Take a look at the dataset [here](https://github.com/a01110946/chatbot/blob/main/tec_de_monterrey/Tecnologico-de-Monterrey_Curriculum.csv) so you know what type of questions you can ask!\n\nThis app is unofficial and not tied to Tecnológico de Monterrey; it showcases how Large Language Models interact with tabular data.")
     with right_column:
         st.image(image2,use_column_width='auto')
 
