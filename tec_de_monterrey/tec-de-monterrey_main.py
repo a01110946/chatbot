@@ -4,8 +4,6 @@ from langchain.chat_models import ChatOpenAI
 from langchain.agents.agent_toolkits import create_pandas_dataframe_agent
 from langchain.agents.agent_types import AgentType
 from langchain.memory import ConversationBufferMemory
-#from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
-from langchain.callbacks import StreamlitCallbackHandler
 import requests
 import urllib.request
 from PIL import Image
@@ -58,26 +56,16 @@ for message in st.session_state.messages:
         st.markdown(message["content"])
 
 # Accept user input
-if prompt := st.chat_input("What would you like to know regarding Tecnológico de Monterrey's curriculum?"):
+if prompt := st.chat_input("What is up?"):
     # Add user message to chat history
     st.session_state.messages.append({"role": "user", "content": prompt})
-    
     # Display user message in chat message container
     with st.chat_message("user"):
         st.markdown(prompt)
-
-    # Create a placeholder for the assistant's message
-    assistant_message_placeholder = st.empty()
-
-    # Initialize the StreamlitCallbackHandler
-    st_callback = StreamlitCallbackHandler(st.container())
-
-    # Run the agent with the callback for streaming
-    response = agent.run({"input": prompt}, callbacks=[st_callback])
-
-    # Extract the final output from the response and display it in the placeholder
-    final_output = response
-    assistant_message_placeholder.chat_message("assistant").markdown(final_output)
-    
-    # Add the final response to the chat history
-    st.session_state.messages.append({"role": "assistant", "content": final_output})
+    # Display assistant response in chat message container
+    with st.chat_message("assistant"):
+        message_placeholder = st.empty()
+        response = agent({"input": prompt})
+        full_response = response["output"]
+        message_placeholder.markdown(full_response)
+    st.session_state.messages.append({"role": "assistant", "content": full_response})
