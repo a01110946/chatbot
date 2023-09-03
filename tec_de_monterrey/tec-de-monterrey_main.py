@@ -76,16 +76,3 @@ if prompt := st.chat_input("What would you like to know regarding Tecnológico d
         
         # Add the final response to the chat history
         st.session_state.messages.append({"role": "assistant", "content": response})
-
-"""
-        message_placeholder = st.empty()
-        full_response = ""
-
-        # Modify this section to handle streaming
-        for response in agent({"input": prompt}, stream=True):  # Add the stream=True parameter
-            full_response += response["output"]
-            message_placeholder.markdown(full_response + "▌")  # Add a cursor to indicate it's still typing
-            
-        message_placeholder.markdown(full_response)
-    st.session_state.messages.append({"role": "assistant", "content": full_response})
-"""
