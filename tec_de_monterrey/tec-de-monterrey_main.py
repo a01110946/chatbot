@@ -4,7 +4,8 @@ from langchain.chat_models import ChatOpenAI
 from langchain.agents.agent_toolkits import create_pandas_dataframe_agent
 from langchain.agents.agent_types import AgentType
 from langchain.memory import ConversationBufferMemory
-from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
+#from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
+from langchain.callbacks import StreamlitCallbackHandler
 import requests
 import urllib.request
 from PIL import Image
@@ -44,7 +45,7 @@ with open("Tecnologico-de-Monterrey_Curriculum.csv", "wb") as file:
 df = pd.read_csv('Tecnologico-de-Monterrey_Curriculum.csv', encoding='ISO-8859-1')
 
 # Initialize LLM and Pandas DataFram Agent using OpenAI Functions.
-llm = ChatOpenAI(verbose=True, model="gpt-3.5-turbo-16k", temperature=0, openai_api_key=st.secrets["OPENAI_API_KEY"], request_timeout=120, max_retries=2, streaming=True, callbacks=[StreamingStdOutCallbackHandler()])
+llm = ChatOpenAI(verbose=True, model="gpt-3.5-turbo-16k", temperature=0, openai_api_key=st.secrets["OPENAI_API_KEY"], request_timeout=120, max_retries=2, streaming=True)
 agent = create_pandas_dataframe_agent(llm, df, agent_type=AgentType.OPENAI_FUNCTIONS, memory=ConversationBufferMemory(memory_key="chat_history", return_messages=True))
 
 # Initialize chat history
@@ -57,14 +58,26 @@ for message in st.session_state.messages:
         st.markdown(message["content"])
 
 # Accept user input
-if prompt := st.chat_input("What is up?"):
+if prompt := st.chat_input("What would you like to know regarding Tecnológico de Monterrey's curriculum?"):
     # Add user message to chat history
     st.session_state.messages.append({"role": "user", "content": prompt})
+    
     # Display user message in chat message container
     with st.chat_message("user"):
         st.markdown(prompt)
+        
     # Display assistant response in chat message container
     with st.chat_message("assistant"):
+        # Initialize the StreamlitCallbackHandler
+        st_callback = StreamlitCallbackHandler(st.container())
+        
+        # Run the agent with the callback for streaming
+        response = agent.run({"input": prompt}, callbacks=[st_callback])
+        
+        # Add the final response to the chat history
+        st.session_state.messages.append({"role": "assistant", "content": response})
+
+"""
         message_placeholder = st.empty()
         full_response = ""
 
@@ -75,3 +88,4 @@ if prompt := st.chat_input("What is up?"):
             
         message_placeholder.markdown(full_response)
     st.session_state.messages.append({"role": "assistant", "content": full_response})
+"""
