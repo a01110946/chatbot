@@ -63,7 +63,7 @@ if prompt := st.chat_input("Which master's degrees are offered at Querétaro?"):
     with st.chat_message("user", avatar= "🧑‍💻"):
         st.markdown(prompt)
     # Display assistant response in chat message container
-    with st.chat_message("assistant", avatar=🤖):
+    with st.chat_message("assistant", avatar="🤖"):
         message_placeholder = st.empty()
         response = agent({"input": prompt})
         full_response = response["output"]
