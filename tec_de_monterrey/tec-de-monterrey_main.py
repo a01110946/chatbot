@@ -14,6 +14,9 @@ image = Image.open('logo_tec_de_monterrey')
 urllib.request.urlretrieve('https://raw.githubusercontent.com/a01110946/chatbot/main/tec_de_monterrey/agent-v1.png', 'agent-image')
 image2 = Image.open('agent-image')
 
+urllib.request.urlretrieve('https://raw.githubusercontent.com/a01110946/chatbot/main/tec_de_monterrey/agent-v1.png', 'icon_tec_de_monterrey')
+image3 = Image.open('agent-image')
+
 # Streamlit UI.
 st.set_page_config(page_title="Tec de Monterrey - Chatbot", page_icon=":robot:", layout="wide")
 with st.container():  
