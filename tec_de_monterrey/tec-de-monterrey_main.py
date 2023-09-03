@@ -44,7 +44,7 @@ with st.container():
     with left_column:
         st.image(image,use_column_width='auto')#despliega logo
         st.header('Tec ChatBot')
-        st.markdown("Many \"question-answering\" tools focus on unstructured text, yet much data is tabular. We've created a demo app to query table-based data using a dataset from Tecnológico de Monterrey's website. Take a look at the dataset [here](https://github.com/a01110946/chatbot/blob/main/tec_de_monterrey/Tecnologico-de-Monterrey_Curriculum.csv) so you know what type of questions you can ask!\n\nThis app is unofficial and not tied to Tecnológico de Monterrey; it showcases how Large Language Models interact with tabular data.")
+        st.markdown("Many \"question-answering\" tools focus on unstructured text, yet much data is tabular. We've created a demo app to query table-based data using a dataset from Tecnológico de Monterrey's website. Take a look at the dataset [here](https://github.com/a01110946/chatbot/blob/main/tec_de_monterrey/Tecnologico-de-Monterrey_Curriculum.csv) so you know what type of questions you can ask!\n\nThis is not an official app and is not endorsed by Tecnológico de Monterrey.")
     with right_column:
         st.image(image2,use_column_width='auto')
 
@@ -80,3 +80,4 @@ if result is not None:
 if st.session_state["generated"]:
     for i in range(len(st.session_state["generated"]) - 1, -1, -1):
         st.write(f"Bot: {st.session_state['generated'][i]}")
+        st.write(f"User: {st.session_state['past'][i]}"
