@@ -14,8 +14,8 @@ image = Image.open('logo_tec_de_monterrey')
 urllib.request.urlretrieve('https://raw.githubusercontent.com/a01110946/chatbot/main/tec_de_monterrey/agent-v1.png', 'agent-image')
 image2 = Image.open('agent-image')
 
-urllib.request.urlretrieve('https://raw.githubusercontent.com/a01110946/chatbot/main/tec_de_monterrey/Logo_del_ITESM.svg', 'icon_tec_de_monterrey')
-image3 = Image.open('icon_tec_de_monterrey')
+urllib.request.urlretrieve('https://raw.githubusercontent.com/a01110946/chatbot/main/tec_de_monterrey/Logo_del_ITESM.svg', 'Logo_del_ITESM')
+image3 = Image.open('Logo_del_ITESM')
 
 # Streamlit UI.
 st.set_page_config(page_title="Tec de Monterrey - Chatbot", page_icon=":robot:", layout="wide")
