@@ -8,24 +8,24 @@ import requests
 import urllib.request
 from PIL import Image
 
+# Initialize chat history
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+
+"""
 # Initialize session state for conversation history
 if "generated" not in st.session_state:
     st.session_state["generated"] = []
 if "past" not in st.session_state:
     st.session_state["past"] = []
+"""
 
-# GitHub file URL
+# GitHub file URL - Send a GET request to download the file - Save the file locally - Read CSV file and load Pandas DataFrame
 file_url = "https://raw.githubusercontent.com/a01110946/chatbot/main/tec_de_monterrey/Tecnologico-de-Monterrey_Curriculum.csv"
-
-# Send a GET request to download the file
 response = requests.get(file_url)
-
-# Save the file locally
-with open("Corpus_de_informacion.csv", "wb") as file:
+with open("Tecnologico-de-Monterrey_Curriculum.csv", "wb") as file:
     file.write(response.content)
-
-# Read CSV file and load Pandas DataFrame
-df = pd.read_csv('Corpus_de_informacion.csv', encoding='ISO-8859-1')
+df = pd.read_csv('Tecnologico-de-Monterrey_Curriculum.csv', encoding='ISO-8859-1')
 
 # Initialize LLM and Pandas DataFram Agent using OpenAI Functions.
 llm = ChatOpenAI(verbose=True, model="gpt-3.5-turbo-16k", temperature=0, openai_api_key=st.secrets["OPENAI_API_KEY"], request_timeout=120, max_retries=2)
@@ -36,6 +36,12 @@ image = Image.open('logo_tec_de_monterrey')
 
 urllib.request.urlretrieve('https://raw.githubusercontent.com/a01110946/chatbot/main/tec_de_monterrey/agent-v1.png', 'agent-image')
 image2 = Image.open('agent-image')
+
+
+# Display chat messages from history on app rerun
+for message in st.session_state.messages:
+    with st.chat_message(message["role"]):
+        st.markdown(message["content"])
 
 # Streamlit UI.
 st.set_page_config(page_title="Tec de Monterrey - Chatbot", page_icon=":robot:", layout="wide")
@@ -60,6 +66,7 @@ Ask questions to our Chatbot.
 st.title('Tec Chatbot')
 st.info("TecChat Bot can provide answers to most of your questions regarding Tecnológico de Monterrey's curriculum.")
 
+"""
 query_text = st.text_input('Enter your question:', placeholder = 'In which campus is architecture offered?')
 
 # Submit question and information query
@@ -68,11 +75,10 @@ with st.form('myform', clear_on_submit=True):
     submitted = st.form_submit_button('Submit')
     if submitted:
         with st.spinner('Calculating...'):
-            response = agent({"input": query_text}, include_run_info=True)
+            response = agent({"input": query_text})
             result = response["output"]
             st.session_state.past.append(query_text)
             st.session_state.generated.append(result)
-            #run_id = response["__run"].run_id
 if result is not None:
 	st.info(result)
 	
@@ -81,3 +87,19 @@ if st.session_state["generated"]:
     for i in range(len(st.session_state["generated"]) - 1, -1, -1):
         st.write(f"Bot: {st.session_state['generated'][i]}")
         st.write(f"User: {st.session_state['past'][i]}")
+"""
+
+ Accept user input
+if prompt := st.chat_input("What is up?"):
+    # Add user message to chat history
+    st.session_state.messages.append({"role": "user", "content": prompt})
+    # Display user message in chat message container
+    with st.chat_message("user"):
+        st.markdown(prompt)
+    # Display assistant response in chat message container
+    with st.chat_message("assistant"):
+        message_placeholder = st.empty()
+        response = agent({"input": prompt})
+        full_response = response["output"]
+        message_placeholder.markdown(full_response)
+    st.session_state.messages.append({"role": "assistant", "content": full_response})
