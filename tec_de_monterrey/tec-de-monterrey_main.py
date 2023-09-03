@@ -8,10 +8,6 @@ import requests
 import urllib.request
 from PIL import Image
 
-# Initialize chat history
-if "messages" not in st.session_state:
-    st.session_state.messages = []
-
 """
 # Initialize session state for conversation history
 if "generated" not in st.session_state:
@@ -37,12 +33,6 @@ image = Image.open('logo_tec_de_monterrey')
 urllib.request.urlretrieve('https://raw.githubusercontent.com/a01110946/chatbot/main/tec_de_monterrey/agent-v1.png', 'agent-image')
 image2 = Image.open('agent-image')
 
-
-# Display chat messages from history on app rerun
-for message in st.session_state.messages:
-    with st.chat_message(message["role"]):
-        st.markdown(message["content"])
-
 # Streamlit UI.
 st.set_page_config(page_title="Tec de Monterrey - Chatbot", page_icon=":robot:", layout="wide")
 with st.container():  
@@ -61,8 +51,6 @@ and postgraduate courses offered by Tecnológico de Monterrey.
     
 Ask questions to our Chatbot.
 """)
-
-#st.set_page_config(page_title='Tec Chatbot')
 st.title('Tec Chatbot')
 st.info("TecChat Bot can provide answers to most of your questions regarding Tecnológico de Monterrey's curriculum.")
 
@@ -88,6 +76,15 @@ if st.session_state["generated"]:
         st.write(f"Bot: {st.session_state['generated'][i]}")
         st.write(f"User: {st.session_state['past'][i]}")
 """
+
+# Initialize chat history
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+
+# Display chat messages from history on app rerun
+for message in st.session_state.messages:
+    with st.chat_message(message["role"]):
+        st.markdown(message["content"])
 
 # Accept user input
 if prompt := st.chat_input("What is up?"):
