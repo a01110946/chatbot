@@ -35,14 +35,6 @@ Ask questions to our Chatbot.
 st.title('Tec Chatbot')
 st.info("TecChat Bot can provide answers to most of your questions regarding Tecnológico de Monterrey's curriculum.")
 
-"""
-# Initialize session state for conversation history
-if "generated" not in st.session_state:
-    st.session_state["generated"] = []
-if "past" not in st.session_state:
-    st.session_state["past"] = []
-"""
-
 # GitHub file URL - Send a GET request to download the file - Save the file locally - Read CSV file and load Pandas DataFrame
 file_url = "https://raw.githubusercontent.com/a01110946/chatbot/main/tec_de_monterrey/Tecnologico-de-Monterrey_Curriculum.csv"
 response = requests.get(file_url)
@@ -53,31 +45,6 @@ df = pd.read_csv('Tecnologico-de-Monterrey_Curriculum.csv', encoding='ISO-8859-1
 # Initialize LLM and Pandas DataFram Agent using OpenAI Functions.
 llm = ChatOpenAI(verbose=True, model="gpt-3.5-turbo-16k", temperature=0, openai_api_key=st.secrets["OPENAI_API_KEY"], request_timeout=120, max_retries=2)
 agent = create_pandas_dataframe_agent(llm, df, agent_type=AgentType.OPENAI_FUNCTIONS, memory=ConversationBufferMemory(memory_key="chat_history", return_messages=True))
-
-
-
-"""
-query_text = st.text_input('Enter your question:', placeholder = 'In which campus is architecture offered?')
-
-# Submit question and information query
-result = None
-with st.form('myform', clear_on_submit=True):
-    submitted = st.form_submit_button('Submit')
-    if submitted:
-        with st.spinner('Calculating...'):
-            response = agent({"input": query_text})
-            result = response["output"]
-            st.session_state.past.append(query_text)
-            st.session_state.generated.append(result)
-if result is not None:
-	st.info(result)
-	
-# Display past conversation
-if st.session_state["generated"]:
-    for i in range(len(st.session_state["generated"]) - 1, -1, -1):
-        st.write(f"Bot: {st.session_state['generated'][i]}")
-        st.write(f"User: {st.session_state['past'][i]}")
-"""
 
 # Initialize chat history
 if "messages" not in st.session_state:
