@@ -8,6 +8,12 @@ import requests
 import urllib.request
 from PIL import Image
 
+urllib.request.urlretrieve('https://raw.githubusercontent.com/a01110946/chatbot/main/tec_de_monterrey/logo-tec.png', 'logo_tec_de_monterrey')
+image = Image.open('logo_tec_de_monterrey')
+
+urllib.request.urlretrieve('https://raw.githubusercontent.com/a01110946/chatbot/main/tec_de_monterrey/agent-v1.png', 'agent-image')
+image2 = Image.open('agent-image')
+
 # Streamlit UI.
 st.set_page_config(page_title="Tec de Monterrey - Chatbot", page_icon=":robot:", layout="wide")
 with st.container():  
@@ -48,11 +54,7 @@ df = pd.read_csv('Tecnologico-de-Monterrey_Curriculum.csv', encoding='ISO-8859-1
 llm = ChatOpenAI(verbose=True, model="gpt-3.5-turbo-16k", temperature=0, openai_api_key=st.secrets["OPENAI_API_KEY"], request_timeout=120, max_retries=2)
 agent = create_pandas_dataframe_agent(llm, df, agent_type=AgentType.OPENAI_FUNCTIONS, memory=ConversationBufferMemory(memory_key="chat_history", return_messages=True))
 
-urllib.request.urlretrieve('https://raw.githubusercontent.com/a01110946/chatbot/main/tec_de_monterrey/logo-tec.png', 'logo_tec_de_monterrey')
-image = Image.open('logo_tec_de_monterrey')
 
-urllib.request.urlretrieve('https://raw.githubusercontent.com/a01110946/chatbot/main/tec_de_monterrey/agent-v1.png', 'agent-image')
-image2 = Image.open('agent-image')
 
 """
 query_text = st.text_input('Enter your question:', placeholder = 'In which campus is architecture offered?')
