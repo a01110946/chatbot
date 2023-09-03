@@ -14,8 +14,8 @@ image = Image.open('logo_tec_de_monterrey')
 urllib.request.urlretrieve('https://raw.githubusercontent.com/a01110946/chatbot/main/tec_de_monterrey/agent-v1.png', 'agent-image')
 image2 = Image.open('agent-image')
 
-urllib.request.urlretrieve('https://raw.githubusercontent.com/a01110946/chatbot/main/tec_de_monterrey/agent-v1.png', 'icon_tec_de_monterrey')
-image3 = Image.open('agent-image')
+urllib.request.urlretrieve('https://raw.githubusercontent.com/a01110946/chatbot/main/tec_de_monterrey/Logo_del_ITESM.svg', 'icon_tec_de_monterrey')
+image3 = Image.open('icon_tec_de_monterrey')
 
 # Streamlit UI.
 st.set_page_config(page_title="Tec de Monterrey - Chatbot", page_icon=":robot:", layout="wide")
@@ -66,7 +66,7 @@ if prompt := st.chat_input("Which master's degrees are offered at Querétaro?"):
     with st.chat_message("user", avatar= "🧑‍💻"):
         st.markdown(prompt)
     # Display assistant response in chat message container
-    with st.chat_message("assistant", avatar= "🤖"):
+    with st.chat_message("assistant", avatar=image3):
         message_placeholder = st.empty()
         response = agent({"input": prompt})
         full_response = response["output"]
