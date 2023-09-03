@@ -89,7 +89,7 @@ if st.session_state["generated"]:
         st.write(f"User: {st.session_state['past'][i]}")
 """
 
- Accept user input
+# Accept user input
 if prompt := st.chat_input("What is up?"):
     # Add user message to chat history
     st.session_state.messages.append({"role": "user", "content": prompt})
