@@ -4,7 +4,6 @@ from langchain.chat_models import ChatOpenAI
 from langchain.agents.agent_toolkits import create_pandas_dataframe_agent
 from langchain.agents.agent_types import AgentType
 from langchain.memory import ConversationBufferMemory
-from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 import requests
 import urllib.request
 from PIL import Image
@@ -66,12 +65,7 @@ if prompt := st.chat_input("Which master's degrees are offered at Querétaro?"):
     # Display assistant response in chat message container
     with st.chat_message("assistant"):
         message_placeholder = st.empty()
-        full_response = ""
-        
-        # Modify this section to handle streaming
-        for response in agent({"input": prompt}, stream=True):  # Add the stream=True parameter
-            full_response += response["output"]
-            message_placeholder.markdown(full_response + "▌")  # Add a cursor to indicate it's still typing
-            
-        message_placeholder.markdown(full_response)  # Display the final full response
-        st.session_state.messages.append({"role": "assistant", "content": full_response})
+        response = agent({"input": prompt})
+        full_response = response["output"]
+        message_placeholder.markdown(full_response)
+    st.session_state.messages.append({"role": "assistant", "content": full_response})
