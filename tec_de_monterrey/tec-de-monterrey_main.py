@@ -65,14 +65,19 @@ if prompt := st.chat_input("What would you like to know regarding Tecnológico d
     # Display user message in chat message container
     with st.chat_message("user"):
         st.markdown(prompt)
-        
-    # Display assistant response in chat message container
-    with st.chat_message("assistant"):
-        # Initialize the StreamlitCallbackHandler
-        st_callback = StreamlitCallbackHandler(st.container())
-        
-        # Run the agent with the callback for streaming
-        response = agent.run({"input": prompt}, callbacks=[st_callback])
-        
-        # Add the final response to the chat history
-        st.session_state.messages.append({"role": "assistant", "content": response})
+
+    # Create a placeholder for the assistant's message
+    assistant_message_placeholder = st.empty()
+
+    # Initialize the StreamlitCallbackHandler
+    st_callback = StreamlitCallbackHandler(st.container())
+
+    # Run the agent with the callback for streaming
+    response = agent.run({"input": prompt}, callbacks=[st_callback])
+
+    # Extract the final output from the response and display it in the placeholder
+    final_output = response
+    assistant_message_placeholder.chat_message("assistant").markdown(final_output)
+    
+    # Add the final response to the chat history
+    st.session_state.messages.append({"role": "assistant", "content": final_output})
