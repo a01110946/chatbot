@@ -63,10 +63,10 @@ if prompt := st.chat_input("Which master's degrees are offered at Querétaro?"):
     # Add user message to chat history
     st.session_state.messages.append({"role": "user", "content": prompt})
     # Display user message in chat message container
-    with st.chat_message("user", avatar= "🧑‍💻"):
+    with st.chat_message("user"):
         st.markdown(prompt)
     # Display assistant response in chat message container
-    with st.chat_message("assistant", avatar=image3):
+    with st.chat_message("assistant"):
         message_placeholder = st.empty()
         response = agent({"input": prompt})
         full_response = response["output"]
